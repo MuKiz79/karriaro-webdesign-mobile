@@ -266,6 +266,7 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
             var loading = document.getElementById('kv-loading');
             var result = document.getElementById('kv-result');
             var errBox = document.getElementById('kv-error');
+            var submitting = false; // Code-Review-Fix: Busy-Guard gegen Enter-Doppel-Submit (teure KI-Calls + 5/h-Budget)
 
             function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (m) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[m]; }); }
 
@@ -274,10 +275,15 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
                 errBox.classList.add('is-on');
                 stage.classList.remove('is-on');
                 submit.disabled = false;
+                submitting = false;
                 submit.querySelector('span').textContent = 'KI-Spiegel zeigen';
             }
 
             function countUp(el, target) {
+                // Code-Review-Fix: reduced-motion respektieren (CSS tut es, der JS-Count-up bisher nicht).
+                if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    el.textContent = target; return;
+                }
                 var start = performance.now(), dur = 1400;
                 function tick(now) {
                     var p = Math.min(1, (now - start) / dur);
@@ -314,6 +320,7 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
 
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
+                if (submitting) return; // Code-Review-Fix: laufende Analyse nicht parallel re-feuern (Enter-Taste)
                 errBox.classList.remove('is-on');
                 var business = document.getElementById('kv-business').value.trim();
                 if (business.length < 2) { document.getElementById('kv-business').focus(); return; }
@@ -323,6 +330,7 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
                     ort: document.getElementById('kv-ort').value.trim(),
                     branche: document.getElementById('kv-branche').value
                 };
+                submitting = true;
                 submit.disabled = true;
                 submit.querySelector('span').textContent = 'Analysiert …';
                 stage.classList.add('is-on');
@@ -354,6 +362,7 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
                     result.classList.add('is-on');
                     countUp(document.getElementById('kv-score-val'), Math.max(0, Math.min(100, parseInt(res.visibilityScore, 10) || 0)));
                     submit.disabled = false;
+                    submitting = false;
                     submit.querySelector('span').textContent = 'Erneut prüfen';
                     result.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }).catch(function (err) {
