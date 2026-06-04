@@ -635,6 +635,10 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         nav .cta:hover { background: var(--color-indigo); color: #fff; }
         nav .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
         nav .menu-toggle span { display: block; width: 18px; height: 2px; background: var(--color-onyx); margin: 4px 0; transition: all 0.3s; }
+        /* Burger → X, sobald geöffnet (via aria-expanded, das beim Öffnen gesetzt wird) */
+        nav .menu-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        nav .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+        nav .menu-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
         .mobile-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; background: rgba(251,251,253,0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 24px; border-bottom: 1px solid rgba(0,0,0,0.06); z-index: 49; }
         .mobile-menu.open { display: flex; flex-direction: column; gap: 20px; }
         .mobile-menu a { font-size: 17px; color: var(--color-onyx); font-weight: 500; }
@@ -2448,14 +2452,14 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
             }
         }
         .kr-pull-quote--hero {
-            font-size: clamp(48px, 8.5vw, 132px) !important;
-            line-height: 0.98 !important;
-            letter-spacing: -0.028em !important;
-            max-width: 1280px !important;
+            font-size: clamp(40px, 6vw, 92px) !important;
+            line-height: 1.02 !important;
+            letter-spacing: -0.022em !important;
+            max-width: 1100px !important;
         }
         .kr-pull-quote--hero::before {
-            font-size: clamp(180px, 22vw, 320px) !important;
-            top: -0.22em !important;
+            font-size: clamp(120px, 14vw, 200px) !important;
+            top: -0.20em !important;
         }
         .kr-founder-pov { max-width: 1200px; padding: 0 24px; }
         .kr-founder-pov-grid {
@@ -3633,9 +3637,9 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         } catch(e) {}
     })();
     </script>
-    <link rel="preload" as="style" href="/css/mobile-overrides.css?v=421">
-    <link rel="stylesheet" href="/css/mobile-overrides.css?v=421" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="/css/mobile-overrides.css?v=421"></noscript>
+    <link rel="preload" as="style" href="/css/mobile-overrides.css?v=422">
+    <link rel="stylesheet" href="/css/mobile-overrides.css?v=422" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/css/mobile-overrides.css?v=422"></noscript>
     <script>(function(){if(/[?&]screenshot=1/.test(location.search))document.documentElement.classList.add('screenshot-mode');})();</script>
     <style>html.screenshot-mode .topbar,html.screenshot-mode header,html.screenshot-mode nav,html.screenshot-mode .kr-strip,html.screenshot-mode .kr-footer-card{display:none!important}</style>
     <link rel="manifest" href="/manifest.json">
@@ -4690,7 +4694,7 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
                 <p>
                     Handcodierte Premium-Websites für den deutschen Mittelstand.
                     Festpreis 1.290–3.990 € einmalig. Maximal fünf Pilot-Plätze
-                    pro Quartal. Lighthouse 99/100 als Mindeststandard.
+                    pro Quartal. Performance, die wir vor dem Launch prüfen — messbar.
                 </p>
                 <a href="#kontakt">Erstgespräch buchen →</a>
             </article>
@@ -4848,8 +4852,8 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         <!-- 60vh Pull-Quote-Hero -->
         <div class="kr-quote-hero">
             <blockquote class="kr-pull-quote kr-pull-quote--hero">
-                <p>Handcodierte Unikate mit eingebauten Werkzeugen, die mitarbeiten und für die KI-Auffindbarkeit optimiert sind.</p>
-                <cite>Wenn Ihr Name draufsteht, steht unserer dahinter. — Karriaro-Versprechen</cite>
+                <p>Wenn Ihr Name draufsteht, steht unserer dahinter.</p>
+                <cite>Karriaro-Versprechen</cite>
             </blockquote>
             <!-- Sprint 197 — Phyllotaxis-Manufaktursiegel (Goldener Winkel 137,5° · 13 Punkte),
                  aus dem Hero hierher verschoben: Codex-Heimat „Deep-Moment". Pulsiert subtil
@@ -5549,7 +5553,7 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
                 <header class="kr-letter-head">
                     <p class="m-mag-eyebrow m-mag-eyebrow--kontakt">№&nbsp;06 · Kontakt</p>
                     <h2 class="kr-letter-headline">Lassen Sie uns sprechen.</h2>
-                    <p class="kr-letter-meta">Stuttgart · <span data-kr-date></span></p>
+                    <p class="kr-letter-meta">Köln · <span data-kr-date></span></p>
                 </header>
 
                 <div class="kr-letter-body">
@@ -5589,7 +5593,7 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
                         </label>
                         <label class="kr-letter-field kr-letter-field--full kr-letter-field--gold">
                             <span>Wer hat uns empfohlen? <em>· 200 € Cashback für Empfehler (optional)</em></span>
-                            <input type="text" name="empfehlung" placeholder="z. B. Steuerberater Müller, Stuttgart">
+                            <input type="text" name="empfehlung" placeholder="z. B. Steuerberater Müller, Köln">
                         </label>
                         <label class="kr-letter-field kr-letter-field--full">
                             <span>Was möchten Sie erreichen?</span>
@@ -5668,12 +5672,12 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
                         <circle cx="124" cy="124" r="3"><title>Dortmund</title></circle>
                         <circle cx="56"  cy="158" r="3"><title>Essen</title></circle>
                         <circle cx="148" cy="170" r="3"><title>Düsseldorf</title></circle>
-                        <circle cx="92"  cy="208" r="3"><title>Köln</title></circle>
+                        <circle cx="92"  cy="208" r="4" fill="var(--color-gold)"><title>Köln · Manufaktur</title></circle>
                         <circle cx="206" cy="160" r="3"><title>Leipzig</title></circle>
                         <circle cx="246" cy="200" r="3"><title>Dresden</title></circle>
                         <circle cx="172" cy="230" r="3"><title>Frankfurt</title></circle>
                         <circle cx="200" cy="290" r="3"><title>Nürnberg</title></circle>
-                        <circle cx="116" cy="278" r="3.5"><title>Stuttgart · Karriaro-Sitz</title></circle>
+                        <circle cx="116" cy="278" r="3"><title>Stuttgart</title></circle>
                         <circle cx="172" cy="340" r="3"><title>München</title></circle>
                     </g>
                 </svg>
@@ -5920,7 +5924,7 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
                 'Sprechzeiten transparent': 'Aktuelle Öffnungs- und Sprechzeiten plus Vertretungs-Hinweise — kein „wir-rufen-Sie-an"-Modal.',
                 'Telemedizin-Link': 'Direkter Video-Sprechstunden-Link für eingeloggte Patienten. Bestätigung in 30 Min, Video startet automatisch.',
                 'Patienten-Aufnahme online': 'Neue Patienten füllen Anamnese und Stammdaten vor dem Termin online aus — Wartezimmer-Stau weg.',
-                'BFSG-konform': 'Barrierefreiheitsstärkungsgesetz seit Juni 2025 Pflicht. Demo erfüllt WCAG 2.2 AA inkl. Tastatur-Navigation und Screenreader.',
+                'BFSG-konform': 'Barrierefreiheitsstärkungsgesetz seit Juni 2025 Pflicht. Demo erfüllt WCAG 2.1 AA inkl. Tastatur-Navigation und Screenreader.',
                 // Handwerk
                 'Anfrage-Formular statt Telefon': 'Strukturiertes Formular mit Foto-Upload und Beschreibung. Inhaber sieht alles morgens auf einen Blick — keine Telefon-Zettelwirtschaft.',
                 'Notdienst-Status sichtbar': 'Realtime-Anzeige der Erreichbarkeit und Anrückzeit pro Region. Kein statisches „24/7" — echte Live-Verfügbarkeit.',
@@ -6429,6 +6433,6 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
     </script>
 
 
-<script src="/js/m-interactions.js?v=421" defer></script>
+<script src="/js/m-interactions.js?v=422" defer></script>
 </body>
 </html>
