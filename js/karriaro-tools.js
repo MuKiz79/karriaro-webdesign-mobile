@@ -219,7 +219,7 @@
             var preis = FRISEUR_PREISE[style] || 65;
             var bild = FRISEUR_BILDER[style];
             var bildHtml = bild
-                ? '<img src="/images/friseur/' + bild + '" alt="Style-Vorschau ' + style + '" loading="lazy" width="180" height="180" style="float:left; width:90px; height:90px; object-fit:cover; border-radius:8px; margin:0 14px 8px 0;">'
+                ? '<img src="https://karriaro-webdesign.de/images/friseur/' + bild + '" alt="Style-Vorschau ' + style + '" loading="lazy" width="180" height="180" style="float:left; width:90px; height:90px; object-fit:cover; border-radius:8px; margin:0 14px 8px 0;">'
                 : '';
             showOutput('friseur',
                 style,
