@@ -129,9 +129,10 @@ function init() {
     if (!running) return;
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
-    // Drehung um die Y-Achse (Turntable) — für Rakete UND Sphäre.
+    // Rakete = langsame Y-Drehung (Turntable); Siegel = steht (Logo bleibt lesbar).
     angY += dt * 0.25;
     const cy = Math.cos(angY), sy = Math.sin(angY);
+    const isRocket = current === 'rocket';
 
     if (pointerActive) { raycaster.setFromCamera(pointer, camera); raycaster.ray.intersectPlane(planeZ0, mouseWorld); }
     else mouseWorld.set(9999, 9999, 9999);
@@ -141,7 +142,8 @@ function init() {
     for (let i = 0; i < COUNT; i++) {
       const i3 = i * 3;
       const hx = home[i3], hy = home[i3 + 1], hz = home[i3 + 2];
-      rot.x = hx * cy + hz * sy; rot.y = hy; rot.z = -hx * sy + hz * cy;
+      if (isRocket) { rot.x = hx * cy + hz * sy; rot.y = hy; rot.z = -hx * sy + hz * cy; }
+      else { rot.x = hx; rot.y = hy; rot.z = hz; }
 
       const s = seed[i];
       rot.x += Math.sin(t * 1.3 + s * 6.28) * 0.05;
@@ -197,25 +199,41 @@ function init() {
   io.observe(box);
 
   // ── Formgeneratoren ──────────────────────────────────────────────────────
-  // Goldene-Winkel-Sphäre (Fibonacci-Kugel) — 3D-Ausdruck des Siegels: Punkte
-  // gleichverteilt auf einer Kugel via Goldenem Winkel; EINE goldene Spiral-Naht.
+  // Karriaro-SIEGEL: 4 Eck-Klammern (Bracket-K) + Phyllotaxis-Blüte (Goldener
+  // Winkel 137,5°) mit goldenem Fibonacci-Faden. Faithful zum Logo (gruender.html).
+  // Zur Kamera ausgerichtet (X-Y), steht still → bleibt als Logo lesbar.
   function buildBloom(n) {
     const pos = new Float32Array(n * 3), col = new Float32Array(n * 3);
     const cremeDim = new THREE.Color(0x8E876E), cremeHi = new THREE.Color(0xF1EFE7);
-    const goldHot = new THREE.Color(0xFFD060), tmp = new THREE.Color();
-    const R = 4.3, ARMS = 13;
-    for (let k = 0; k < n; k++) {
-      const i3 = k * 3;
-      const y = 1 - (k / (n - 1)) * 2;               // Pol → Pol (1 .. -1)
-      const rad = Math.sqrt(Math.max(0, 1 - y * y)); // Ringradius je Breitengrad
-      const th = k * GOLDEN_ANGLE;
-      const isSeam = (k % ARMS === 0);
-      const rr = R * (isSeam ? 1.03 : 1.0);          // Naht minimal nach außen → sitzt proud
-      pos[i3] = rr * Math.cos(th) * rad; pos[i3 + 1] = rr * y; pos[i3 + 2] = rr * Math.sin(th) * rad;
-      let cc;
-      if (isSeam) cc = goldHot;                       // goldene Naht (eine Spirale Pol→Pol)
-      else cc = tmp.copy(cremeDim).lerp(cremeHi, 0.35 + 0.45 * rad); // Äquator heller → Volumen
-      col[i3] = cc.r; col[i3 + 1] = cc.g; col[i3 + 2] = cc.b;
+    const goldHot = new THREE.Color(0xFFD45E), tmp = new THREE.Color();
+    const S = 5.0, L = 1.9, R = 4.4, ARMS = 13;
+    const nBr = Math.floor(n * 0.14);                 // ~14 % Partikel → Eck-Klammern
+    // 8 Segmente: je Ecke ein Arm nach innen-horizontal + ein Arm nach innen-vertikal
+    const corners = [[-S, -S], [S, -S], [-S, S], [S, S]], segs = [];
+    for (let ci = 0; ci < 4; ci++) {
+      const cx = corners[ci][0], cy = corners[ci][1], sx = cx < 0 ? 1 : -1, sy = cy < 0 ? 1 : -1;
+      segs.push([cx, cy, cx + sx * L, cy]); segs.push([cx, cy, cx, cy + sy * L]);
+    }
+    for (let i = 0; i < nBr; i++) {
+      const s = segs[i % 8], t = Math.random(), j = i * 3;
+      pos[j] = s[0] + (s[2] - s[0]) * t; pos[j + 1] = s[1] + (s[3] - s[1]) * t; pos[j + 2] = (Math.random() - 0.5) * 0.12;
+      col[j] = cremeHi.r; col[j + 1] = cremeHi.g; col[j + 2] = cremeHi.b;
+    }
+    // Blüte = DISKRETE Phyllotaxis-Punkte (wie das Logo), NICHT eine gefüllte Scheibe.
+    // ~140 Einzel-Punkte im Goldenen Winkel; Gold auf Fibonacci-Stellen = goldener Faden.
+    const D = 140, cd = R / Math.sqrt(D), jr = 0.085;
+    const FIB = { 1: 1, 2: 1, 3: 1, 5: 1, 8: 1, 13: 1, 21: 1, 34: 1, 55: 1, 89: 1, 144: 1 };
+    const dx = new Float32Array(D), dy = new Float32Array(D), dz = new Float32Array(D), dgold = new Uint8Array(D);
+    for (let d = 0; d < D; d++) {
+      const dd = d + 1, r = cd * Math.sqrt(dd), th = dd * GOLDEN_ANGLE, rn = r / R;
+      dx[d] = r * Math.cos(th); dy[d] = r * Math.sin(th); dz[d] = (1 - rn * rn) * 0.7 - 0.15; dgold[d] = FIB[dd] ? 1 : 0;
+    }
+    for (let i = nBr; i < n; i++) {
+      const d = (i - nBr) % D, j = i * 3;
+      const a = Math.random() * Math.PI * 2, rr = Math.sqrt(Math.random()) * jr;
+      pos[j] = dx[d] + Math.cos(a) * rr; pos[j + 1] = dy[d] + Math.sin(a) * rr; pos[j + 2] = dz[d] + (Math.random() - 0.5) * 0.05;
+      const cc = dgold[d] ? goldHot : tmp.copy(cremeDim).lerp(cremeHi, 0.6);
+      col[j] = cc.r; col[j + 1] = cc.g; col[j + 2] = cc.b;
     }
     return { pos, col };
   }
