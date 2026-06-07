@@ -47,12 +47,6 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
 
     <link rel="icon" type="image/svg+xml" href="https://karriaro-webdesign.de/images/favicon.svg?v=8">
 
-    <!-- Import-Map: self-hosted Three.js für die GPGPU-Engine + vendored Addons (bare 'three'-Import).
-         Statisch im <head>, damit sie vor dem dynamisch injizierten Modul existiert. Mobil = kein Fetch. -->
-    <script type="importmap">
-    { "imports": { "three": "/js/three.module.js" } }
-    </script>
-
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -110,13 +104,6 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         }
         .controls button:hover { border-color: #C9A24B; color: #fff; }
         .controls button.is-active { background: #C9A24B; border-color: #C9A24B; color: #0E141B; font-weight: 600; }
-
-        .palette { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 9px; margin-top: 14px; }
-        .palette-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(236,230,216,0.5); margin-right: 4px; }
-        .swatch { width: 26px; height: 26px; padding: 0; border-radius: 999px; cursor: pointer; border: 1px solid rgba(236,230,216,0.3);
-            background: conic-gradient(var(--s3) 0 33%, var(--s1) 0 66%, var(--s2) 0 100%); transition: transform .2s var(--ease-standard, ease), box-shadow .2s ease; }
-        .swatch:hover { transform: translateY(-2px); }
-        .swatch.is-active { border-color: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,0.25); }
 
         .stage-meta { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; justify-content: center; margin-top: 18px; }
         .stage-meta .hint { font-size: 12.5px; color: rgba(236,230,216,0.62); }
@@ -210,7 +197,7 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         <section class="stage" aria-label="Interaktiver Partikelschwarm">
             <div class="stage-inner">
                 <div class="canvas-box" id="kr-canvas-box">
-                    <canvas id="kr-swarm" role="img" aria-label="3D-Drohnenschwarm, der zwischen einer goldenen Sphäre und einer Rakete morpht"></canvas>
+                    <canvas id="kr-swarm" role="img" aria-label="3D-Drohnenschwarm, der zwischen dem Karriaro-Siegel und einer Rakete morpht"></canvas>
                     <!-- Poster / Fallback (Mobil, Touch, reduzierte Bewegung): statisches Phyllotaxis-Siegel -->
                     <div class="poster" aria-hidden="true">
                         <svg width="180" height="180" viewBox="0 0 90 90">
@@ -221,24 +208,13 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
                 </div>
 
                 <div class="controls" role="group" aria-label="Form wählen">
-                    <button type="button" data-form="seal" class="is-active" aria-pressed="true">Siegel</button>
-                    <button type="button" data-form="wordmark" aria-pressed="false">Wortmarke</button>
-                    <button type="button" data-form="sphere" aria-pressed="false">Sphäre</button>
+                    <button type="button" data-form="bloom" class="is-active" aria-pressed="true">Siegel</button>
                     <button type="button" data-form="rocket" aria-pressed="false">Rakete</button>
                 </div>
 
-                <div class="palette" role="group" aria-label="Farbe wählen">
-                    <span class="palette-label mono">Farbe</span>
-                    <button type="button" class="swatch is-active" data-pal="0" aria-pressed="true" title="Mitternacht" style="--s1:#F1EFE7;--s2:#9DB2C9;--s3:#C9A24B"></button>
-                    <button type="button" class="swatch" data-pal="1" aria-pressed="false" title="Kupfer" style="--s1:#F3E3D0;--s2:#C97B43;--s3:#FFC15E"></button>
-                    <button type="button" class="swatch" data-pal="2" aria-pressed="false" title="Porzellan" style="--s1:#FFFFFF;--s2:#BFC7CE;--s3:#D8B36A"></button>
-                    <button type="button" class="swatch" data-pal="3" aria-pressed="false" title="Aurora" style="--s1:#8FF0D0;--s2:#5AA0FF;--s3:#C07BFF"></button>
-                    <button type="button" class="swatch" data-pal="4" aria-pressed="false" title="Magma" style="--s1:#FFE49C;--s2:#FF5A3C;--s3:#FFD23A"></button>
-                </div>
-
                 <div class="stage-meta">
-                    <span class="hint">Maus bewegen — die Drohnen wirbeln · Klick — Schockwelle · Form & Farbe unten</span>
-                    <span class="tech">GPU-Compute · ~40.000 Drohnen · Curl-Noise · φ = 1,618</span>
+                    <span class="hint">Maus bewegen — die Drohnen weichen aus · Klick — Explosion · Form unten wechseln</span>
+                    <span class="tech">echtes 3D · WebGL · GPU-gerendert · ~6.500 drohnen · φ = 1,618</span>
                 </div>
             </div>
         </section>
@@ -324,8 +300,8 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
             var narrow = (window.innerWidth || 0) <= 900;
             if (reduce || coarse || narrow) return; // Poster bleibt stehen
             var s = document.createElement('script');
-            s.type = 'module'; // ES-Modul (importiert self-hosted Three.js + Addons via Importmap)
-            s.src = '/js/werkschau-swarm-gpu.js?v=243';
+            s.type = 'module'; // ES-Modul (importiert self-hosted Three.js)
+            s.src = '/js/werkschau-swarm-3d.js?v=244';
             document.body.appendChild(s);
         })();
     </script>

@@ -38,7 +38,7 @@ function init() {
   };
   const GOLDEN_ANGLE = (3 - Math.sqrt(5)) * Math.PI; // 137,50776°
   const FIB = { 1:1,2:1,3:1,5:1,8:1,13:1,21:1,34:1,55:1,89:1,144:1,233:1,377:1,610:1,987:1,1597:1,2584:1,4181:1 };
-  const COUNT = 6500;
+  const COUNT = 9000;
 
   // ── Renderer / Szene (in die Box, nicht Vollbild) ──────────────────────
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -79,7 +79,7 @@ function init() {
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   const material = new THREE.PointsMaterial({
-    size: 0.14, map: makeDroneSprite(), vertexColors: true,
+    size: 0.11, map: makeDroneSprite(), vertexColors: true,
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true,
   });
   const points = new THREE.Points(geometry, material);
@@ -129,10 +129,13 @@ function init() {
     if (!running) return;
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
-    // Rakete = langsame Y-Drehung (Turntable); Siegel = steht (Logo bleibt lesbar).
+    // Rakete: volle Y-Drehung (Turntable). Siegel: 3D-Wiegen (±~29° um Y) + leichte
+    // Neigung → voluminös/räumlich, aber NIE edge-on (Logo bleibt lesbar).
     angY += dt * 0.25;
-    const cy = Math.cos(angY), sy = Math.sin(angY);
     const isRocket = current === 'rocket';
+    const ay = isRocket ? angY : Math.sin(t * 0.4) * 0.26;   // Siegel: dezentes Wiegen (~±15°)
+    const cy = Math.cos(ay), sy = Math.sin(ay);
+    const TILT = isRocket ? 0 : 0.12, ct = Math.cos(TILT), st = Math.sin(TILT);
 
     if (pointerActive) { raycaster.setFromCamera(pointer, camera); raycaster.ray.intersectPlane(planeZ0, mouseWorld); }
     else mouseWorld.set(9999, 9999, 9999);
@@ -142,8 +145,8 @@ function init() {
     for (let i = 0; i < COUNT; i++) {
       const i3 = i * 3;
       const hx = home[i3], hy = home[i3 + 1], hz = home[i3 + 2];
-      if (isRocket) { rot.x = hx * cy + hz * sy; rot.y = hy; rot.z = -hx * sy + hz * cy; }
-      else { rot.x = hx; rot.y = hy; rot.z = hz; }
+      const X = hx * cy + hz * sy, Y = hy, Z = -hx * sy + hz * cy;
+      rot.x = X; rot.y = Y * ct - Z * st; rot.z = Y * st + Z * ct;
 
       const s = seed[i];
       rot.x += Math.sin(t * 1.3 + s * 6.28) * 0.05;
@@ -199,40 +202,36 @@ function init() {
   io.observe(box);
 
   // ── Formgeneratoren ──────────────────────────────────────────────────────
-  // Karriaro-SIEGEL: 4 Eck-Klammern (Bracket-K) + Phyllotaxis-Blüte (Goldener
-  // Winkel 137,5°) mit goldenem Fibonacci-Faden. Faithful zum Logo (gruender.html).
-  // Zur Kamera ausgerichtet (X-Y), steht still → bleibt als Logo lesbar.
+  // Karriaro-SIEGEL als glühende SPIRALARME (Galaxie/Mandala) — dicht UND strukturiert:
+  // bold leuchtende Goldwinkel-Spiralarme (golden-glühender Kern → Creme außen) mit
+  // dunklen Lücken dazwischen + gestochener Eck-Rahmen (1,12·R). Edel wie die Rakete.
   function buildBloom(n) {
     const pos = new Float32Array(n * 3), col = new Float32Array(n * 3);
-    const cremeDim = new THREE.Color(0x8E876E), cremeHi = new THREE.Color(0xF1EFE7);
-    const goldHot = new THREE.Color(0xFFD45E), tmp = new THREE.Color();
-    const S = 5.0, L = 1.9, R = 4.4, ARMS = 13;
-    const nBr = Math.floor(n * 0.14);                 // ~14 % Partikel → Eck-Klammern
-    // 8 Segmente: je Ecke ein Arm nach innen-horizontal + ein Arm nach innen-vertikal
-    const corners = [[-S, -S], [S, -S], [-S, S], [S, S]], segs = [];
-    for (let ci = 0; ci < 4; ci++) {
-      const cx = corners[ci][0], cy = corners[ci][1], sx = cx < 0 ? 1 : -1, sy = cy < 0 ? 1 : -1;
-      segs.push([cx, cy, cx + sx * L, cy]); segs.push([cx, cy, cx, cy + sy * L]);
+    const gold = new THREE.Color(0xFFD24A), creme = new THREE.Color(0xF4F1EA), tmp = new THREE.Color();
+    const R = 6.0, s = R * 1.12, L = s * 0.33, ARMS = 5, WIND = 0.78, TH = 0.55;
+    // Eck-Rahmen
+    const segs = [];
+    for (const cc of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+      const ax = cc[0] * s, ay = cc[1] * s;
+      segs.push([ax, ay - cc[1] * L, ax, ay]);
+      segs.push([ax, ay, ax - cc[0] * L, ay]);
     }
+    const nBr = Math.floor(n * 0.10);
     for (let i = 0; i < nBr; i++) {
-      const s = segs[i % 8], t = Math.random(), j = i * 3;
-      pos[j] = s[0] + (s[2] - s[0]) * t; pos[j + 1] = s[1] + (s[3] - s[1]) * t; pos[j + 2] = (Math.random() - 0.5) * 0.12;
-      col[j] = cremeHi.r; col[j + 1] = cremeHi.g; col[j + 2] = cremeHi.b;
+      const seg = segs[i % 8], t = Math.random(), j = i * 3;
+      pos[j] = seg[0] + (seg[2] - seg[0]) * t + (Math.random() - 0.5) * 0.05;
+      pos[j + 1] = seg[1] + (seg[3] - seg[1]) * t + (Math.random() - 0.5) * 0.05;
+      pos[j + 2] = (Math.random() - 0.5) * 0.05;
+      col[j] = creme.r; col[j + 1] = creme.g; col[j + 2] = creme.b;
     }
-    // Blüte = DISKRETE Phyllotaxis-Punkte (wie das Logo), NICHT eine gefüllte Scheibe.
-    // ~140 Einzel-Punkte im Goldenen Winkel; Gold auf Fibonacci-Stellen = goldener Faden.
-    const D = 140, cd = R / Math.sqrt(D), jr = 0.085;
-    const FIB = { 1: 1, 2: 1, 3: 1, 5: 1, 8: 1, 13: 1, 21: 1, 34: 1, 55: 1, 89: 1, 144: 1 };
-    const dx = new Float32Array(D), dy = new Float32Array(D), dz = new Float32Array(D), dgold = new Uint8Array(D);
-    for (let d = 0; d < D; d++) {
-      const dd = d + 1, r = cd * Math.sqrt(dd), th = dd * GOLDEN_ANGLE, rn = r / R;
-      dx[d] = r * Math.cos(th); dy[d] = r * Math.sin(th); dz[d] = (1 - rn * rn) * 0.7 - 0.15; dgold[d] = FIB[dd] ? 1 : 0;
-    }
+    // Glühende Spiralarme: dicht innerhalb der Arme, Lücken dazwischen → Struktur sichtbar
     for (let i = nBr; i < n; i++) {
-      const d = (i - nBr) % D, j = i * 3;
-      const a = Math.random() * Math.PI * 2, rr = Math.sqrt(Math.random()) * jr;
-      pos[j] = dx[d] + Math.cos(a) * rr; pos[j + 1] = dy[d] + Math.sin(a) * rr; pos[j + 2] = dz[d] + (Math.random() - 0.5) * 0.05;
-      const cc = dgold[d] ? goldHot : tmp.copy(cremeDim).lerp(cremeHi, 0.6);
+      const j = i * 3, a = (i - nBr) % ARMS, t = Math.sqrt(Math.random());
+      const r = R * t, th = a * (2 * Math.PI / ARMS) + t * WIND * 2 * Math.PI;
+      const off = TH * (0.25 + 0.9 * t) * (Math.random() - 0.5) * 2;   // Arm-Dicke (außen dicker)
+      const px = -Math.sin(th), py = Math.cos(th);
+      pos[j] = Math.cos(th) * r + px * off; pos[j + 1] = Math.sin(th) * r + py * off; pos[j + 2] = (1 - t * t) * 0.5 - 0.1 + (Math.random() - 0.5) * 0.05;
+      const cc = tmp.copy(gold).lerp(creme, Math.min(1, t * 1.25));     // goldener Kern → Creme-Spitzen
       col[j] = cc.r; col[j + 1] = cc.g; col[j + 2] = cc.b;
     }
     return { pos, col };
