@@ -140,10 +140,10 @@ html.embed-hero .hero-h1-line{display:block}
         .material-viz-canvas { aspect-ratio: 16/10; background-color: var(--bg-soft); background-size: cover; background-position: center; border-radius: var(--p-radius-lg); margin: 40px auto 24px; max-width: 980px; display: flex; align-items: center; justify-content: center; font-family: var(--font-tight); font-weight: 700; font-size: clamp(40px, 5vw, 72px); color: #fff; letter-spacing: -0.02em; transition: background-image 0.4s ease; position: relative; overflow: hidden; border: 1px solid var(--border); text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
         .material-viz-canvas::before { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 55%, rgba(0,0,0,0.35) 100%); z-index: 1; }
         .material-viz-canvas > * { position: relative; z-index: 2; }
-        .material-viz-canvas[data-material="prefa"] { background-image: url('https://karriaro-webdesign.de/images/dachdecker/nachher-3-pv-indach.jpg'); }
-        .material-viz-canvas[data-material="braas"] { background-image: url('https://karriaro-webdesign.de/images/dachdecker/nachher-1-neueindeckung.jpg'); }
-        .material-viz-canvas[data-material="eternit"] { background-image: url('https://karriaro-webdesign.de/images/dachdecker/vorher-1-moos.jpg'); }
-        .material-viz-canvas[data-material="zinco"] { background-image: url('https://karriaro-webdesign.de/images/dachdecker/vorher-3-pv-leer.jpg'); }
+        .material-viz-canvas[data-material="prefa"] { background-image: url('/images/dachdecker/nachher-3-pv-indach.jpg'); }
+        .material-viz-canvas[data-material="braas"] { background-image: url('/images/dachdecker/nachher-1-neueindeckung.jpg'); }
+        .material-viz-canvas[data-material="eternit"] { background-image: url('/images/dachdecker/vorher-1-moos.jpg'); }
+        .material-viz-canvas[data-material="zinco"] { background-image: url('/images/dachdecker/vorher-3-pv-leer.jpg'); }
         .material-toggles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 980px; margin: 0 auto; }
         .material-btn { padding: 18px 16px; background: var(--bg); border: 1px solid var(--border-strong); border-radius: var(--p-radius); cursor: pointer; transition: all 0.2s; text-align: left; font-family: inherit; }
         .material-btn:hover { border-color: var(--accent); }
@@ -523,6 +523,20 @@ html.embed-hero .hero-h1-line{display:block}
         .ai-result-cost { padding: 12px 14px; background: var(--accent-bg); border-radius: 6px; font-size: 14px; }
         .ai-result-cost strong { display: block; font-size: 18px; color: var(--accent-strong); margin-top: 4px; }
         .ai-result-disclaimer { font-size: 11px; color: var(--text-light); margin-top: 10px; line-height: 1.45; }
+        /* Hinweis-Zustand: kein Foto hochgeladen → keine erfundene Diagnose */
+        .ai-result.is-hint { display: block; border-style: dashed; border-color: var(--accent); background: var(--accent-bg); }
+        .ai-result.is-hint .ai-result-loading, .ai-result.is-hint .ai-result-body { display: none; }
+        .ai-result-hint { display: none; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--text); line-height: 1.5; }
+        .ai-result.is-hint .ai-result-hint { display: flex; }
+        .ai-result-hint svg { width: 22px; height: 22px; flex-shrink: 0; stroke: var(--accent-strong); margin-top: 1px; }
+        .foto-drop.needs-photo { border-color: var(--accent-strong); box-shadow: 0 0 0 3px rgba(122,139,107,0.25); animation: dropPulse 0.6s ease 2; }
+        @keyframes dropPulse { 0%,100% { box-shadow: 0 0 0 3px rgba(122,139,107,0.25); } 50% { box-shadow: 0 0 0 7px rgba(122,139,107,0.12); } }
+        /* Foto-Vorschau (Thumbnails + Zähler) */
+        .foto-preview { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .foto-preview-count { width: 100%; font-size: 12px; font-weight: 600; color: var(--accent-strong); margin: 2px 0; }
+        .foto-preview-thumb { position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+        .foto-preview-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .foto-preview-thumb button { position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; padding: 0; border: none; border-radius: 50%; background: rgba(20,20,20,0.72); color: #fff; font-size: 12px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
         /* Hagel-Karte */
         .hagel { background: var(--bg); padding: 64px 0; border-top: 1px solid var(--border); }
@@ -638,7 +652,7 @@ html.embed-hero .hero-h1-line{display:block}
          in Lean-Embed-iframes brauchen DNS+TLS-Handshake). Spart 200-400ms. -->
     <link rel="preconnect" href="https://karriaro-webdesign.de" crossorigin>
     <link rel="dns-prefetch" href="https://karriaro-webdesign.de">
-    <link rel="preload" as="image" href="https://karriaro-webdesign.de/images/immobilien-stadtmakler-mockup-fold.jpg?v=139" fetchpriority="high">
+    <link rel="preload" as="image" href="/images/immobilien-stadtmakler-mockup-fold.jpg?v=139" fetchpriority="high">
     <link rel="prefetch" href="/portfolio/immobilien-makler-embed-desktop.html">
     <link rel="prefetch" href="/portfolio/coaching-lehmann-embed-desktop.html">
     <meta name="theme-color" content="#FFFFFF">
@@ -685,8 +699,8 @@ html.embed-hero .hero-h1-line{display:block}
                     </div>
                     <div class="hero-mockup">
                         <picture>
-                            <source type="image/avif" srcset="https://karriaro-webdesign.de/images/dachdecker/persona.avif">
-                            <img class="hero-portrait-img hero-portrait-img--editorial" src="https://karriaro-webdesign.de/images/dachdecker/persona.jpg" alt="Thomas Berger, Dachdeckermeister Meisterbetrieb Berger" loading="eager" width="800" height="1000">
+                            <source type="image/avif" srcset="/images/dachdecker/persona.avif">
+                            <img class="hero-portrait-img hero-portrait-img--editorial" src="/images/dachdecker/persona.jpg" alt="Thomas Berger, Dachdeckermeister Meisterbetrieb Berger" loading="eager" width="800" height="1000">
                         </picture>
                         <div class="mockup-caption">
                             <span class="hero-portrait-caption">Thomas Berger <span class="sep">·</span> Dachdeckermeister <span class="sep">·</span> 3. Generation</span>
