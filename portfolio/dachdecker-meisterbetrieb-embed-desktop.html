@@ -140,10 +140,10 @@ html.embed-hero .hero-h1-line{display:block}
         .material-viz-canvas { aspect-ratio: 16/10; background-color: var(--bg-soft); background-size: cover; background-position: center; border-radius: var(--p-radius-lg); margin: 40px auto 24px; max-width: 980px; display: flex; align-items: center; justify-content: center; font-family: var(--font-tight); font-weight: 700; font-size: clamp(40px, 5vw, 72px); color: #fff; letter-spacing: -0.02em; transition: background-image 0.4s ease; position: relative; overflow: hidden; border: 1px solid var(--border); text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
         .material-viz-canvas::before { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 55%, rgba(0,0,0,0.35) 100%); z-index: 1; }
         .material-viz-canvas > * { position: relative; z-index: 2; }
-        .material-viz-canvas[data-material="prefa"] { background-image: url('/images/dachdecker/nachher-3-pv-indach.jpg'); }
-        .material-viz-canvas[data-material="braas"] { background-image: url('/images/dachdecker/nachher-1-neueindeckung.jpg'); }
-        .material-viz-canvas[data-material="eternit"] { background-image: url('/images/dachdecker/vorher-1-moos.jpg'); }
-        .material-viz-canvas[data-material="zinco"] { background-image: url('/images/dachdecker/vorher-3-pv-leer.jpg'); }
+        .material-viz-canvas[data-material="prefa"] { background-image: url('https://karriaro-webdesign.de/images/dachdecker/nachher-3-pv-indach.jpg'); }
+        .material-viz-canvas[data-material="braas"] { background-image: url('https://karriaro-webdesign.de/images/dachdecker/nachher-1-neueindeckung.jpg'); }
+        .material-viz-canvas[data-material="eternit"] { background-image: url('https://karriaro-webdesign.de/images/dachdecker/vorher-1-moos.jpg'); }
+        .material-viz-canvas[data-material="zinco"] { background-image: url('https://karriaro-webdesign.de/images/dachdecker/vorher-3-pv-leer.jpg'); }
         .material-toggles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 980px; margin: 0 auto; }
         .material-btn { padding: 18px 16px; background: var(--bg); border: 1px solid var(--border-strong); border-radius: var(--p-radius); cursor: pointer; transition: all 0.2s; text-align: left; font-family: inherit; }
         .material-btn:hover { border-color: var(--accent); }
@@ -473,6 +473,7 @@ html.embed-hero .hero-h1-line{display:block}
         .solar-toggle-row .hint { color: var(--text-soft); font-size: 12px; margin-left: auto; }
         .foerder-line.solar { color: var(--accent-strong); }
         .foerder-line.solar.is-hidden { display: none; }
+        .foerder-hint { font-size: 14px; color: var(--text-soft); text-align: center; padding: 14px 0; }
 
         /* Sturmschaden-Checkliste-Modal */
         .modal-wide { max-width: 600px; text-align: left; }
@@ -654,7 +655,7 @@ html.embed-hero .hero-h1-line{display:block}
          in Lean-Embed-iframes brauchen DNS+TLS-Handshake). Spart 200-400ms. -->
     <link rel="preconnect" href="https://karriaro-webdesign.de" crossorigin>
     <link rel="dns-prefetch" href="https://karriaro-webdesign.de">
-    <link rel="preload" as="image" href="/images/immobilien-stadtmakler-mockup-fold.jpg?v=139" fetchpriority="high">
+    <link rel="preload" as="image" href="https://karriaro-webdesign.de/images/immobilien-stadtmakler-mockup-fold.jpg?v=139" fetchpriority="high">
     <link rel="prefetch" href="/portfolio/immobilien-makler-embed-desktop.html">
     <link rel="prefetch" href="/portfolio/coaching-lehmann-embed-desktop.html">
     <meta name="theme-color" content="#FFFFFF">
@@ -701,8 +702,8 @@ html.embed-hero .hero-h1-line{display:block}
                     </div>
                     <div class="hero-mockup">
                         <picture>
-                            <source type="image/avif" srcset="/images/dachdecker/persona.avif">
-                            <img class="hero-portrait-img hero-portrait-img--editorial" src="/images/dachdecker/persona.jpg" alt="Thomas Berger, Dachdeckermeister Meisterbetrieb Berger" loading="eager" width="800" height="1000">
+                            <source type="image/avif" srcset="https://karriaro-webdesign.de/images/dachdecker/persona.avif">
+                            <img class="hero-portrait-img hero-portrait-img--editorial" src="https://karriaro-webdesign.de/images/dachdecker/persona.jpg" alt="Thomas Berger, Dachdeckermeister Meisterbetrieb Berger" loading="eager" width="800" height="1000">
                         </picture>
                         <div class="mockup-caption">
                             <span class="hero-portrait-caption">Thomas Berger <span class="sep">·</span> Dachdeckermeister <span class="sep">·</span> 3. Generation</span>
