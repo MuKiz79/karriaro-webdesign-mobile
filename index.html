@@ -3963,9 +3963,9 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
     }
     </script>
     <!--KR_REVIEWS_END-->
-    <link rel="preload" as="style" href="/css/mobile-overrides.css?v=442">
-    <link rel="stylesheet" href="/css/mobile-overrides.css?v=442" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="/css/mobile-overrides.css?v=442"></noscript>
+    <link rel="preload" as="style" href="/css/mobile-overrides.css?v=443">
+    <link rel="stylesheet" href="/css/mobile-overrides.css?v=443" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/css/mobile-overrides.css?v=443"></noscript>
     <script>(function(){if(/[?&]screenshot=1/.test(location.search))document.documentElement.classList.add('screenshot-mode');})();</script>
     <style>html.screenshot-mode .topbar,html.screenshot-mode header,html.screenshot-mode nav,html.screenshot-mode .kr-strip,html.screenshot-mode .kr-footer-card{display:none!important}</style>
     <link rel="manifest" href="/manifest.json">
@@ -4431,9 +4431,14 @@ html.kr-splash-lock,html.kr-splash-lock body{overflow:hidden!important}
                 <p class="m-demo-sheet-eyebrow" data-m-demo-sheet-eyebrow>Live-Demo</p>
                 <h3 class="m-demo-sheet-title" id="m-demo-sheet-title" data-m-demo-sheet-title>Demo</h3>
             </div>
-            <button type="button" class="m-demo-sheet-close" data-m-demo-sheet-close aria-label="Schließen">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
+            <div class="m-demo-sheet-head-actions">
+                <a class="m-demo-sheet-open-tab" data-m-demo-sheet-tab href="#" target="_blank" rel="noopener" aria-label="Beispiel in neuem Tab öffnen" title="In neuem Tab öffnen">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+                <button type="button" class="m-demo-sheet-close" data-m-demo-sheet-close aria-label="Schließen">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
         </header>
         <div class="m-demo-sheet-body">
             <div class="m-demo-sheet-loader" data-m-demo-sheet-loader>
@@ -4443,7 +4448,15 @@ html.kr-splash-lock,html.kr-splash-lock body{overflow:hidden!important}
             <iframe class="m-demo-sheet-frame" data-m-demo-sheet-frame title="Live-Demo" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <footer class="m-demo-sheet-foot">
-            <a class="m-demo-sheet-open-tab" data-m-demo-sheet-tab href="#" target="_blank" rel="noopener">In neuem Tab öffnen ↗</a>
+            <button type="button" class="m-demo-sheet-nav" data-m-demo-sheet-prev aria-label="Vorheriges Beispiel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+                <span>Zurück</span>
+            </button>
+            <span class="m-demo-sheet-counter" data-m-demo-sheet-counter aria-live="polite">1&nbsp;/&nbsp;8</span>
+            <button type="button" class="m-demo-sheet-nav" data-m-demo-sheet-next aria-label="Nächstes Beispiel">
+                <span>Weiter</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
         </footer>
     </div>
 </div>
@@ -6829,6 +6842,6 @@ html.kr-splash-lock,html.kr-splash-lock body{overflow:hidden!important}
          rechts weicht via .whatsapp-fab-Erkennung kollisionssicher aus. -->
     <script src="/js/whatsapp.js?v=2" defer></script>
 
-<script src="/js/m-interactions.js?v=425" defer></script>
+<script src="/js/m-interactions.js?v=426" defer></script>
 </body>
 </html>

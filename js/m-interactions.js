@@ -239,6 +239,9 @@
         var sheetTitle = document.querySelector('[data-m-demo-sheet-title]');
         var sheetEyebrow = document.querySelector('[data-m-demo-sheet-eyebrow]');
         var sheetTab = document.querySelector('[data-m-demo-sheet-tab]');
+        var sheetPrev = document.querySelector('[data-m-demo-sheet-prev]');
+        var sheetNext = document.querySelector('[data-m-demo-sheet-next]');
+        var sheetCounter = document.querySelector('[data-m-demo-sheet-counter]');
         if (!rail || !dotsBox || !sheet) return;
         var slides = rail.querySelectorAll('.m-demo-swiper-slide');
         if (!slides.length) return;
@@ -339,17 +342,20 @@
             if (sheetTitle) sheetTitle.textContent = title;
             if (sheetEyebrow) sheetEyebrow.textContent = domain;
             if (sheetTab) sheetTab.setAttribute('href', href);
+            if (sheetCounter && currentIndex >= 0) sheetCounter.textContent = (currentIndex + 1) + ' / ' + demos.length;
             if (sheetLoader) sheetLoader.classList.remove('is-hidden');
             clearLoadTimer();
             if (sheetFrame) {
-                // Sprint 160 — Lean-Embed-HTML (build-embed-hero.mjs) statt ?embed=hero.
-                var leanSrc = href.replace(/\.html(\?.*)?$/, '-embed.html');
-                sheetFrame.setAttribute('src', leanSrc);
+                // Mobile-Beispiel-Galerie — die VOLLE, interaktive Beispielseite laden,
+                // nicht nur den Hero-Embed ("nur Vorschau"). href ist bereits die volle,
+                // extensionslose Portfolio-URL (z. B. /portfolio/coaching-lehmann).
+                sheetFrame.setAttribute('src', href);
                 sheetFrame.style.opacity = '0';
                 loadTimer = setTimeout(showLoadError, 8000);
             }
             sheet.classList.add('is-open');
             sheet.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('m-demo-sheet-open');
             document.body.style.overflow = 'hidden';
         }
         function openSheet(href, title, domain) {
@@ -367,6 +373,7 @@
             clearLoadTimer();
             sheet.classList.remove('is-open');
             sheet.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('m-demo-sheet-open');
             document.body.style.overflow = '';
             if (sheetFrame) {
                 sheetFrame.setAttribute('src', 'about:blank');
@@ -383,17 +390,44 @@
                 sheetFrame.style.opacity = '1';
             });
         }
-        document.querySelectorAll('[data-m-demo-open]').forEach(function (el) {
+        // Geordnete Demo-Liste für Vor/Zurück-Navigation im Sheet (Mobile-Beispiel-Galerie).
+        // Reihenfolge = DOM-Reihenfolge der Cards; Persona-Tiles lösen card.click() aus
+        // → laufen durch denselben Index-Handler, currentIndex bleibt korrekt.
+        var openers = Array.prototype.slice.call(document.querySelectorAll('[data-m-demo-open]'));
+        var demos = openers.map(function (el) {
+            return {
+                href: el.getAttribute('data-m-demo-href'),
+                title: el.getAttribute('data-m-demo-title'),
+                domain: el.getAttribute('data-m-demo-domain')
+            };
+        });
+        var currentIndex = -1;
+        function openByIndex(i) {
+            if (!demos.length) return;
+            currentIndex = (i % demos.length + demos.length) % demos.length; // Wrap-around (durchblättern)
+            var d = demos[currentIndex];
+            // Beim Durchblättern (Sheet schon offen) den iframe direkt tauschen — KEIN
+            // erneuter View-Transition, der würde den laufenden abbrechen
+            // (InvalidStateError) und ist beim Weiter/Zurück auch unnötig.
+            if (sheet.classList.contains('is-open')) openSheetInternal(d.href, d.title, d.domain);
+            else openSheet(d.href, d.title, d.domain);
+        }
+        openers.forEach(function (el, i) {
             el.addEventListener('click', function (e) {
                 e.preventDefault();
-                openSheet(el.getAttribute('data-m-demo-href'), el.getAttribute('data-m-demo-title'), el.getAttribute('data-m-demo-domain'));
+                openByIndex(i);
             });
         });
+        if (sheetPrev) sheetPrev.addEventListener('click', function () { openByIndex(currentIndex - 1); });
+        if (sheetNext) sheetNext.addEventListener('click', function () { openByIndex(currentIndex + 1); });
         document.querySelectorAll('[data-m-demo-sheet-close]').forEach(function (el) {
             el.addEventListener('click', closeSheet);
         });
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && sheet.classList.contains('is-open')) closeSheet();
+            if (!sheet.classList.contains('is-open')) return;
+            if (e.key === 'Escape') closeSheet();
+            else if (e.key === 'ArrowRight') openByIndex(currentIndex + 1);
+            else if (e.key === 'ArrowLeft') openByIndex(currentIndex - 1);
         });
     }
 

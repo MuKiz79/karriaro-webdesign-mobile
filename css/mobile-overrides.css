@@ -1361,7 +1361,11 @@
         right: 0;
         background: var(--apple-snow);
         border-radius: 16px 16px 0 0;
-        max-height: 92svh;
+        /* Voller interaktiver Beispiel-Viewer: EXPLIZITE Höhe (nicht nur
+           max-height) — sonst kollabiert das Flex-Layout auf die iframe-
+           Default-Höhe (~150px) und man sieht "nur eine Vorschau". */
+        height: 94svh;
+        max-height: 94svh;
         display: flex;
         flex-direction: column;
         transform: translateY(100%);
@@ -1428,7 +1432,8 @@
     }
 
     .m-demo-sheet-body {
-        flex: 1;
+        flex: 1 1 auto;
+        min-height: 0;
         position: relative;
         overflow: hidden;
     }
@@ -1463,21 +1468,91 @@
     }
 
     .m-demo-sheet-frame {
+        display: block;
         width: 100%;
         height: 100%;
         border: 0;
     }
 
+    /* Header-Actions: Icon-Button "In neuem Tab öffnen" + Schließen nebeneinander */
+    .m-demo-sheet-head-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: none;
+    }
+    .m-demo-sheet-open-tab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--apple-fog);
+        color: var(--apple-ink);
+        text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .m-demo-sheet-open-tab svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    /* Footer = Beispiel-Galerie-Navigation: Zurück · Zähler · Weiter */
     .m-demo-sheet-foot {
-        padding: 12px var(--apple-section-pad-x) 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 10px var(--apple-section-pad-x) calc(10px + env(safe-area-inset-bottom, 0px));
         border-top: 1px solid var(--apple-hairline);
         background: var(--apple-snow);
     }
-    .m-demo-sheet-open-tab {
+    .m-demo-sheet-nav {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 44px;
+        padding: 8px 16px;
+        border: 1px solid var(--apple-hairline);
+        border-radius: 999px;
+        background: var(--apple-snow);
+        color: var(--apple-ink);
         font-family: var(--apple-font-text);
         font-size: 15px;
-        font-weight: 500;
-        color: var(--kr-link-warm);
+        font-weight: 600;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: background 0.18s ease, border-color 0.18s ease;
+    }
+    .m-demo-sheet-nav:active {
+        background: var(--apple-fog);
+    }
+    .m-demo-sheet-nav svg {
+        width: 18px;
+        height: 18px;
+        flex: none;
+    }
+    .m-demo-sheet-counter {
+        flex: 1 1 auto;
+        text-align: center;
+        font-family: var(--apple-font-text);
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: var(--apple-graphite);
+        white-space: nowrap;
+    }
+
+    /* Schwebende Buttons (WhatsApp + Concierge "Fragen Sie uns") ausblenden,
+       solange das Burger-Menü ODER das Demo-Sheet offen ist — sonst liegen sie
+       (z-index ~2.1 Mrd.) ÜBER Menü/Sheet und verdecken Inhalte/Menüpunkte. */
+    body.m-menu-open .whatsapp-fab,
+    body.m-menu-open .krc-fab,
+    body.m-demo-sheet-open .whatsapp-fab,
+    body.m-demo-sheet-open .krc-fab {
+        display: none !important;
     }
 }
 
