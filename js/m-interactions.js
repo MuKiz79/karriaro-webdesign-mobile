@@ -242,6 +242,12 @@
         var sheetPrev = document.querySelector('[data-m-demo-sheet-prev]');
         var sheetNext = document.querySelector('[data-m-demo-sheet-next]');
         var sheetCounter = document.querySelector('[data-m-demo-sheet-counter]');
+        var sheetTool = document.querySelector('[data-m-demo-sheet-tool]');
+        var sheetToolName = document.querySelector('[data-m-demo-sheet-tool-name]');
+        var sheetAnfrage = document.querySelector('[data-m-demo-sheet-anfrage]');
+        var sheetAnfrageLabel = document.querySelector('[data-m-demo-sheet-anfrage-label]');
+        var currentTool = '';
+        var currentBranche = '';
         if (!rail || !dotsBox || !sheet) return;
         var slides = rail.querySelectorAll('.m-demo-swiper-slide');
         if (!slides.length) return;
@@ -337,12 +343,18 @@
             }
             if (loadErrorEl) loadErrorEl.style.display = 'flex';
         }
-        function openSheetInternal(href, title, domain) {
+        function openSheetInternal(href, title, domain, tool, branche) {
             lastFocus = document.activeElement;
             if (sheetTitle) sheetTitle.textContent = title;
             if (sheetEyebrow) sheetEyebrow.textContent = domain;
             if (sheetTab) sheetTab.setAttribute('href', href);
             if (sheetCounter && currentIndex >= 0) sheetCounter.textContent = (currentIndex + 1) + ' / ' + demos.length;
+            // Werkzeug-Held: Hinweis-Pill (erst nach iframe-Load zeigen) + Anfrage-Brücke-Label
+            currentTool = tool || '';
+            currentBranche = branche || '';
+            if (sheetToolName) sheetToolName.textContent = currentTool;
+            hideToolHint();
+            if (sheetAnfrageLabel) sheetAnfrageLabel.textContent = branche ? ('Sowas für ' + branche + ' anfragen') : 'Sowas für meine Branche anfragen';
             if (sheetLoader) sheetLoader.classList.remove('is-hidden');
             clearLoadTimer();
             if (sheetFrame) {
@@ -358,19 +370,20 @@
             document.body.classList.add('m-demo-sheet-open');
             document.body.style.overflow = 'hidden';
         }
-        function openSheet(href, title, domain) {
+        function openSheet(href, title, domain, tool, branche) {
             // Sprint 164 — View Transitions API für smoothes Sheet-Open
             // (Chrome 111+, Safari 18+). Graceful Fallback bei alten Browsern.
             if (document.startViewTransition) {
                 document.startViewTransition(function() {
-                    openSheetInternal(href, title, domain);
+                    openSheetInternal(href, title, domain, tool, branche);
                 });
             } else {
-                openSheetInternal(href, title, domain);
+                openSheetInternal(href, title, domain, tool, branche);
             }
         }
         function closeSheet() {
             clearLoadTimer();
+            hideToolHint();
             sheet.classList.remove('is-open');
             sheet.setAttribute('aria-hidden', 'true');
             document.body.classList.remove('m-demo-sheet-open');
@@ -381,6 +394,39 @@
             }
             if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
         }
+        // ── Werkzeug-Held: Hinweis-Pill, die zum eingebauten Werkzeug der Demo springt ──
+        function showToolHint() {
+            if (!sheetTool || !currentTool) return;
+            sheetTool.hidden = false;
+            // reflow → CSS-Transition greift
+            void sheetTool.offsetWidth;
+            sheetTool.classList.add('is-visible');
+            // Sobald der Nutzer selbst in der Demo scrollt → Pill ausblenden (er stöbert).
+            try {
+                var win = sheetFrame && sheetFrame.contentWindow;
+                if (win) {
+                    var onScroll = function () { hideToolHint(); win.removeEventListener('scroll', onScroll); };
+                    win.addEventListener('scroll', onScroll, { passive: true });
+                }
+            } catch (e) {}
+        }
+        function hideToolHint() {
+            if (!sheetTool) return;
+            sheetTool.classList.remove('is-visible');
+            sheetTool.hidden = true;
+        }
+        function jumpToTool() {
+            try {
+                var doc = sheetFrame && sheetFrame.contentDocument;
+                if (doc) {
+                    // Gemeinsame Werkzeug-Selektoren über alle Demo-Seiten (same-origin).
+                    var el = doc.querySelector('.kr-tool-embed, [data-kr-tool-form], .kr-tool-form, #foerder, [id*="rechner"], [id*="werkzeug"]');
+                    if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } catch (e) {}
+            hideToolHint();
+        }
+        if (sheetTool) sheetTool.addEventListener('click', jumpToTool);
         if (sheetFrame) {
             sheetFrame.addEventListener('load', function () {
                 if (sheetFrame.getAttribute('src') === 'about:blank') return;
@@ -388,8 +434,32 @@
                 if (sheetLoader) sheetLoader.classList.add('is-hidden');
                 sheetFrame.style.transition = 'opacity 240ms ease';
                 sheetFrame.style.opacity = '1';
+                showToolHint();
             });
         }
+        // ── Anfrage-Brücke: vom Beispiel direkt ins vorbefüllte Kontaktformular ──
+        function goAnfrage() {
+            var branche = currentBranche;
+            var title = (currentIndex >= 0 && demos[currentIndex]) ? demos[currentIndex].title : '';
+            var tool = currentTool;
+            closeSheet();
+            try { if (typeof window.krTrack === 'function') window.krTrack('Demo Branche anfragen', { branche: branche, quelle: title }); } catch (e) {}
+            setTimeout(function () {
+                var section = document.getElementById('kontakt');
+                if (section && section.scrollIntoView) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                var form = document.getElementById('kontakt-form');
+                if (!form) return;
+                var msg = form.querySelector('textarea[name="message"]');
+                if (msg && !msg.value.trim()) {
+                    msg.value = 'Ich interessiere mich für eine Website wie Ihr Beispiel „' + title + '"' +
+                        (branche ? (' (' + branche + ')') : '') +
+                        (tool ? (' — besonders das Werkzeug „' + tool + '".') : '.');
+                }
+                var nameInput = form.querySelector('input[name="name"]');
+                if (nameInput) setTimeout(function () { try { nameInput.focus({ preventScroll: true }); } catch (e) { nameInput.focus(); } }, 450);
+            }, 60);
+        }
+        if (sheetAnfrage) sheetAnfrage.addEventListener('click', goAnfrage);
         // Geordnete Demo-Liste für Vor/Zurück-Navigation im Sheet (Mobile-Beispiel-Galerie).
         // Reihenfolge = DOM-Reihenfolge der Cards; Persona-Tiles lösen card.click() aus
         // → laufen durch denselben Index-Handler, currentIndex bleibt korrekt.
@@ -398,7 +468,9 @@
             return {
                 href: el.getAttribute('data-m-demo-href'),
                 title: el.getAttribute('data-m-demo-title'),
-                domain: el.getAttribute('data-m-demo-domain')
+                domain: el.getAttribute('data-m-demo-domain'),
+                tool: el.getAttribute('data-m-demo-tool'),
+                branche: el.getAttribute('data-m-demo-branche')
             };
         });
         var currentIndex = -1;
@@ -409,8 +481,8 @@
             // Beim Durchblättern (Sheet schon offen) den iframe direkt tauschen — KEIN
             // erneuter View-Transition, der würde den laufenden abbrechen
             // (InvalidStateError) und ist beim Weiter/Zurück auch unnötig.
-            if (sheet.classList.contains('is-open')) openSheetInternal(d.href, d.title, d.domain);
-            else openSheet(d.href, d.title, d.domain);
+            if (sheet.classList.contains('is-open')) openSheetInternal(d.href, d.title, d.domain, d.tool, d.branche);
+            else openSheet(d.href, d.title, d.domain, d.tool, d.branche);
         }
         openers.forEach(function (el, i) {
             el.addEventListener('click', function (e) {
