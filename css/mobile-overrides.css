@@ -1372,18 +1372,17 @@
         opacity: 1;
     }
 
+    /* VOLLBILD-Viewer: das Beispiel öffnet komplett (top:0 + bottom:0 füllt den
+       fixed inset:0-Container), kein Sheet-Peek, keine runden Ecken — wirkt wie
+       eine eigene Seite. Raus per „← Zurück". */
     .m-demo-sheet-panel {
         position: absolute;
+        top: 0;
         bottom: 0;
         left: 0;
         right: 0;
         background: var(--apple-snow);
-        border-radius: 16px 16px 0 0;
-        /* Voller interaktiver Beispiel-Viewer: EXPLIZITE Höhe (nicht nur
-           max-height) — sonst kollabiert das Flex-Layout auf die iframe-
-           Default-Höhe (~150px) und man sieht "nur eine Vorschau". */
-        height: 94svh;
-        max-height: 94svh;
+        border-radius: 0;
         display: flex;
         flex-direction: column;
         transform: translateY(100%);
@@ -1405,32 +1404,67 @@
     .m-demo-sheet-head {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        padding: 16px var(--apple-section-pad-x);
+        gap: 10px;
+        padding: 10px var(--apple-section-pad-x);
+        /* Notch/Statusbar-Abstand im Vollbild */
+        padding-top: calc(10px + env(safe-area-inset-top, 0px));
         border-bottom: 1px solid var(--apple-hairline);
     }
+    /* „← Zurück"-Button — primärer Ausstieg aus dem Vollbild-Beispiel */
+    .m-demo-sheet-back {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        min-height: 40px;
+        padding: 8px 14px 8px 10px;
+        border: 1px solid var(--apple-hairline);
+        border-radius: 999px;
+        background: var(--apple-snow);
+        color: var(--apple-ink);
+        font-family: var(--apple-font-text);
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: background 0.18s ease;
+    }
+    .m-demo-sheet-back:active { background: var(--apple-fog); }
+    .m-demo-sheet-back svg { width: 19px; height: 19px; flex: none; }
     .m-demo-sheet-head-text {
+        flex: 1 1 auto;
+        min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        align-items: center;
+        text-align: center;
+        gap: 1px;
     }
     .m-demo-sheet-eyebrow {
+        max-width: 100%;
         font-family: var(--apple-font-text);
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 600;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         color: var(--apple-graphite);
         margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .m-demo-sheet-title {
+        max-width: 100%;
         font-family: var(--apple-font-display);
-        font-size: 19px;
+        font-size: 17px;
         font-weight: 600;
         letter-spacing: -0.018em;
-        line-height: 1.25;
+        line-height: 1.2;
         color: var(--apple-ink);
         margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .m-demo-sheet-close {
         background: var(--apple-fog);
