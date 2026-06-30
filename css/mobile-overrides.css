@@ -806,14 +806,32 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+    /* Handy-Vorschau: mobile Browser-Adressleiste (Schloss + Domain mittig,
+       keine macOS-Ampel-Punkte) — signalisiert „Telefon-Browser". */
+    .m-poster-chrome--phone {
+        justify-content: center;
+        gap: 6px;
+        padding: 8px 14px;
+    }
+    .m-poster-chrome--phone .m-poster-chrome-url {
+        flex: 0 1 auto;
+    }
+    .m-poster-chrome-lock {
+        width: 11px;
+        height: 11px;
+        flex: none;
+        color: var(--apple-platinum);
+        opacity: 0.7;
+    }
 
     /* Sprint 162 — Aspect-Ratio 4:3 für "monumentale" Card-Höhe
        (Multi-Designer-Konsens: Magazin-Style impact). iframe-Scaling
        passt sich automatisch an (m-interactions.js setIframeScale
        Formel: stage.clientWidth / 1280, neue Card 94vw → Scale ~0.288). */
+    /* Handy-Vorschau: Hochkant-Stage (Telefon-Proportion) statt 4:3-Landscape. */
     .m-poster-stage {
         position: relative;
-        aspect-ratio: 4 / 3;
+        aspect-ratio: 4 / 5;
         overflow: hidden;
         background: var(--apple-fog);
     }
@@ -821,15 +839,15 @@
         position: absolute;
         top: 0;
         left: 0;
-        width: 1280px;
-        height: 1024px;
+        width: 402px;
+        height: 860px;
         border: 0;
         transform-origin: top left;
         /* --m-iframe-scale wird via JS gesetzt (m-interactions.js
-           setIframeScale, stage.clientWidth / 1280). Fallback 1 statt
-           0.3, damit bei JS-Aussetzer wenigstens Hero-Topleft sichtbar
-           bleibt (overflow:hidden clippt Überstand). */
-        transform: scale(var(--m-iframe-scale, 1));
+           setIframeScale, stage.clientWidth / 402). Fallback 0.9, damit bei
+           JS-Aussetzer das mobile Hero-Topleft sichtbar bleibt
+           (overflow:hidden clippt Überstand). */
+        transform: scale(var(--m-iframe-scale, 0.9));
         pointer-events: none;
     }
 
