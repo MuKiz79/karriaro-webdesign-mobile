@@ -393,14 +393,18 @@
             }
             if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
         }
-        // ── Werkzeug-Held: Hinweis-Pill, die zum eingebauten Werkzeug der Demo springt ──
+        // ── Werkzeug-Held: kurze Hinweis-Pill, die zum eingebauten Werkzeug springt ──
+        var toolHintTimer = null;
         function showToolHint() {
             if (!sheetTool || !currentTool) return;
             sheetTool.hidden = false;
             // reflow → CSS-Transition greift
             void sheetTool.offsetWidth;
             sheetTool.classList.add('is-visible');
-            // Sobald der Nutzer selbst in der Demo scrollt → Pill ausblenden (er stöbert).
+            // Ruhiger: nach 5 s automatisch wieder ausblenden (kurzer Nudge statt Dauer-Pille).
+            if (toolHintTimer) clearTimeout(toolHintTimer);
+            toolHintTimer = setTimeout(hideToolHint, 5000);
+            // Sobald der Nutzer selbst in der Demo scrollt → sofort ausblenden (er stöbert).
             try {
                 var win = sheetFrame && sheetFrame.contentWindow;
                 if (win) {
@@ -410,9 +414,24 @@
             } catch (e) {}
         }
         function hideToolHint() {
+            if (toolHintTimer) { clearTimeout(toolHintTimer); toolHintTimer = null; }
             if (!sheetTool) return;
             sheetTool.classList.remove('is-visible');
             sheetTool.hidden = true;
+        }
+        // Die Karriaro-Demo-Strip (.kr-strip: „← Zurück zu Karriaro · ab 1.990 €")
+        // ist im Viewer redundant zu unserem Zurück-Button + Anfrage-CTA → ausblenden
+        // (same-origin Style-Injektion). Standalone (neuer Tab) bleibt sie sichtbar.
+        function calmInnerDemo() {
+            try {
+                var doc = sheetFrame && sheetFrame.contentDocument;
+                if (doc && doc.head && !doc.getElementById('kr-viewer-calm')) {
+                    var st = doc.createElement('style');
+                    st.id = 'kr-viewer-calm';
+                    st.textContent = '.kr-strip{display:none!important}';
+                    doc.head.appendChild(st);
+                }
+            } catch (e) {}
         }
         function jumpToTool() {
             try {
@@ -433,6 +452,7 @@
                 if (sheetLoader) sheetLoader.classList.add('is-hidden');
                 sheetFrame.style.transition = 'opacity 240ms ease';
                 sheetFrame.style.opacity = '1';
+                calmInnerDemo();
                 showToolHint();
             });
         }
