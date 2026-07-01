@@ -278,6 +278,10 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         footer .f-foot { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
         @media (max-width: 640px) { footer .f-foot { flex-direction: column; gap: 12px; text-align: center; } }
         footer .karriaro-note { color: var(--gold); font-size: 12px; }
+        /* Mobile-Überlauf-Fix (2026-07): eigenes overflow-x:clip (robust gg. veraltet
+           gecachte mobile-overrides.css) + Hero-Content schrumpfbar (min-width:auto-Falle,
+           4px-Überlauf des .hero-content über den .container). */
+        @media (max-width: 600px) { html, body { overflow-x: clip; } .hero-content, .hero-grid > * { min-width: 0; } }
     </style>
     <link rel="stylesheet" href="/css/karriaro-tools.css">
     <!-- View-Transitions (2026-06-04): sanfter Cross-Document-Uebergang Card<->Demo-Seite.
@@ -335,11 +339,6 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
       ]
     }
     </script>
-    <link rel="preload" as="style" href="/css/mobile-overrides.css?v=442">
-    <link rel="stylesheet" href="/css/mobile-overrides.css?v=442" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="/css/mobile-overrides.css?v=442"></noscript>
-    <script>(function(){if(/[?&]screenshot=1/.test(location.search))document.documentElement.classList.add('screenshot-mode');})();</script>
-    <style>html.screenshot-mode .topbar,html.screenshot-mode header,html.screenshot-mode nav,html.screenshot-mode .kr-strip,html.screenshot-mode .kr-footer-card{display:none!important}</style>
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
@@ -811,6 +810,6 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
     <script src="/js/karriaro-tools.js"></script>
     <script src="/js/concierge.js" data-branche="coaching" data-name="Coach Lehmann" data-accent="#2c2c2c" data-greeting="Guten Tag! Ich bin der digitale Assistent von Coach Lehmann. Fragen Sie mich zu Methoden und Ablauf — oder starten Sie mit dem Klarheits-Score." defer></script>
 
-<script src="/js/m-interactions.js?v=425" defer></script>
+<script src="/js/m-interactions.js?v=430" defer></script>
 </body>
 </html>
