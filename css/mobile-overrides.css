@@ -107,6 +107,11 @@
 @media (max-width: 1023px) {
     body {
         margin: 0;
+        /* Backstop gegen horizontales „ins Leere wischen": dekorative Elemente
+           (z. B. die skalierte Hero-Goldblüte) dürfen NIE die Seite breiter als
+           den Viewport machen. `clip` statt `hidden` — bricht kein position:sticky
+           (auf Mobile in Nutzung) und keinen verschachtelten Scroll (Demo-Swiper). */
+        overflow-x: clip;
         background: var(--apple-snow);
         color: var(--apple-graphite);
         font-family: var(--apple-font-text);
@@ -404,6 +409,9 @@
         min-height: auto;
         background: var(--apple-snow);
         display: block;
+        /* Gezielt: die Hero-Goldblüte (.hero-keim-bloom, width:124% + scale(1.5),
+           bleibt via fill:both am Ende stehen) auf Viewport-Breite clippen. */
+        overflow-x: clip;
     }
 
     .hero-with-photo .wrap,
