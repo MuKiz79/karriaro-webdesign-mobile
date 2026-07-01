@@ -579,6 +579,8 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         .kr-footer-cta-secondary { color: rgba(255,255,255,0.72); font-size: 14px; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.3); padding: 8px 0; }
         .kr-footer-cta-secondary:hover { color: #fff; text-decoration-color: #fff; }
         @media (max-width: 720px) { .kr-footer-inner { grid-template-columns: 1fr; gap: 32px; } .kr-footer-ctas { align-items: stretch; } .kr-footer-cta-primary { justify-content: center; } }
+        /* Mobile-Überlauf-Fix (2026-07): Trust-Badge-Reihe umbrechen, Items schrumpfbar. */
+        @media (max-width: 600px) { .trust-strip-inner { flex-wrap: wrap; } .trust-badge { min-width: 0; } }
     </style>
     <script async src="https://lighthouse.karriaro.de/t.js" data-site="karriaro-webdesign"></script>
     <link rel="stylesheet" href="/css/karriaro-tools.css">
@@ -623,9 +625,9 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
       ]
     }
     </script>
-    <link rel="preload" as="style" href="/css/mobile-overrides.css?v=442">
-    <link rel="stylesheet" href="/css/mobile-overrides.css?v=442" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="/css/mobile-overrides.css?v=442"></noscript>
+    <link rel="preload" as="style" href="/css/mobile-overrides.css?v=449">
+    <link rel="stylesheet" href="/css/mobile-overrides.css?v=449" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/css/mobile-overrides.css?v=449"></noscript>
     <script>(function(){if(/[?&]screenshot=1/.test(location.search))document.documentElement.classList.add('screenshot-mode');})();</script>
     <style>html.screenshot-mode .topbar,html.screenshot-mode header,html.screenshot-mode nav,html.screenshot-mode .kr-strip,html.screenshot-mode .kr-footer-card{display:none!important}</style>
     <link rel="manifest" href="/manifest.json">
@@ -1917,6 +1919,6 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
     <!-- Branchen-KI-Concierge (KI-Werkzeug #2) — echter LLM-Assistent für diese Demo -->
     <script src="/js/concierge.js" data-branche="immobilien" data-name="Stadtmakler Stuttgart" data-accent="#1A2E40" data-greeting="Hallo! Ich bin der digitale Assistent von Stadtmakler Stuttgart. Fragen Sie mich zur Wertermittlung, zur Suche oder zu einem Termin." defer></script>
 
-<script src="/js/m-interactions.js?v=425" defer></script>
+<script src="/js/m-interactions.js?v=430" defer></script>
 </body>
 </html>

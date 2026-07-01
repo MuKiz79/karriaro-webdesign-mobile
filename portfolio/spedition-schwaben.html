@@ -497,6 +497,8 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         .kr-footer-cta-secondary { color: rgba(255,255,255,0.72); font-size: 14px; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.3); padding: 8px 0; }
         .kr-footer-cta-secondary:hover { color: #fff; text-decoration-color: #fff; }
         @media (max-width: 720px) { .kr-footer-inner { grid-template-columns: 1fr; gap: 32px; } .kr-footer-ctas { align-items: stretch; } .kr-footer-cta-primary { justify-content: center; } }
+        /* Mobile-Überlauf-Fix (2026-07): Raster + Formular-Zeilen einspaltig, Grid-Items schrumpfbar. */
+        @media (max-width: 600px) { .quote-grid, .quote-form-row, .field-row { grid-template-columns: 1fr !important; } .damage-grid > *, .damage-info, .damage-form, .quote-field, .quote-grid > * { min-width: 0; } .quote-form input, .quote-form select { max-width: 100%; box-sizing: border-box; } .damage-info img { max-width: 100%; } }
     </style>
     <script async src="https://lighthouse.karriaro.de/t.js" data-site="karriaro-webdesign"></script>
     <link rel="stylesheet" href="/css/karriaro-tools.css">
@@ -541,9 +543,9 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
       ]
     }
     </script>
-    <link rel="preload" as="style" href="/css/mobile-overrides.css?v=442">
-    <link rel="stylesheet" href="/css/mobile-overrides.css?v=442" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="/css/mobile-overrides.css?v=442"></noscript>
+    <link rel="preload" as="style" href="/css/mobile-overrides.css?v=449">
+    <link rel="stylesheet" href="/css/mobile-overrides.css?v=449" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/css/mobile-overrides.css?v=449"></noscript>
     <script>(function(){if(/[?&]screenshot=1/.test(location.search))document.documentElement.classList.add('screenshot-mode');})();</script>
     <style>html.screenshot-mode .topbar,html.screenshot-mode header,html.screenshot-mode nav,html.screenshot-mode .kr-strip,html.screenshot-mode .kr-footer-card{display:none!important}</style>
     <link rel="manifest" href="/manifest.json">
@@ -1703,6 +1705,6 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
     <script src="/js/karriaro-tools.js"></script>
     <script src="/js/concierge.js" data-branche="spedition" data-name="Spedition Schwaben" data-accent="#0E1F33" data-greeting="Willkommen bei Spedition Schwaben! Fragen Sie mich zu Frachtkosten, Laufzeiten oder Compliance-Dokumenten." defer></script>
 
-<script src="/js/m-interactions.js?v=425" defer></script>
+<script src="/js/m-interactions.js?v=430" defer></script>
 </body>
 </html>
