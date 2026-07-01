@@ -1404,6 +1404,7 @@
     .m-demo-sheet-head {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 10px;
         padding: 10px var(--apple-section-pad-x);
         /* Notch/Statusbar-Abstand im Vollbild */
@@ -1551,43 +1552,57 @@
     }
 
     /* Footer = Anfrage-Brücke (primär) + Galerie-Navigation (Zurück · Zähler · Weiter) */
+    /* Footer = nur noch die Pagination, mittig (Anfrage-CTA wanderte nach oben) */
     .m-demo-sheet-foot {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding: 12px var(--apple-section-pad-x) calc(12px + env(safe-area-inset-bottom, 0px));
-        border-top: 1px solid var(--apple-hairline);
-        background: var(--apple-snow);
-    }
-    /* Primäre Conversion-Brücke: „Sowas für <Branche> anfragen →" */
-    .m-demo-sheet-anfrage {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
-        width: 100%;
-        min-height: 50px;
-        padding: 13px 20px;
+        gap: 18px;
+        padding: 10px var(--apple-section-pad-x) calc(10px + env(safe-area-inset-bottom, 0px));
+        border-top: 1px solid var(--apple-hairline);
+        background: var(--apple-snow);
+    }
+    /* Primärer Conversion-CTA — kompakte Pille oben rechts neben „← Zurück" */
+    .m-demo-sheet-anfrage {
+        flex: 0 1 auto;
+        min-width: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        min-height: 40px;
+        padding: 9px 16px;
         border: none;
-        border-radius: 14px;
+        border-radius: 999px;
         background: var(--apple-ink, #14202B);
         color: #fff;
         font-family: var(--apple-font-text);
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 600;
-        letter-spacing: -0.01em;
+        letter-spacing: -0.005em;
+        white-space: nowrap;
         cursor: pointer;
         -webkit-tap-highlight-color: transparent;
         transition: transform 0.18s ease, opacity 0.18s ease;
     }
+    .m-demo-sheet-anfrage span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
     .m-demo-sheet-anfrage:active {
-        transform: scale(0.985);
+        transform: scale(0.97);
         opacity: 0.92;
     }
     .m-demo-sheet-anfrage svg {
-        width: 19px;
-        height: 19px;
+        width: 17px;
+        height: 17px;
         flex: none;
+    }
+    /* Sehr schmale Phones (iPhone SE 1): „Zurück"-Text weg → nur ← Pfeil,
+       damit der Anfrage-CTA garantiert passt. */
+    @media (max-width: 359px) {
+        .m-demo-sheet-back span { display: none; }
+        .m-demo-sheet-back { padding: 8px 12px; }
     }
     .m-demo-sheet-nav-row {
         display: flex;

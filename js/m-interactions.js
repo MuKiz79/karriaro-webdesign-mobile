@@ -353,7 +353,9 @@
             currentBranche = branche || '';
             if (sheetToolName) sheetToolName.textContent = currentTool;
             hideToolHint();
-            if (sheetAnfrageLabel) sheetAnfrageLabel.textContent = branche ? ('Sowas für ' + branche + ' anfragen') : 'Sowas für meine Branche anfragen';
+            // Kurzes, immer passendes Label oben neben „← Zurück". Die Branche
+            // steckt weiterhin in der vorbefüllten Nachricht (goAnfrage), nicht im Button.
+            if (sheetAnfrageLabel) sheetAnfrageLabel.textContent = 'Website anfragen';
             if (sheetLoader) sheetLoader.classList.remove('is-hidden');
             clearLoadTimer();
             if (sheetFrame) {
