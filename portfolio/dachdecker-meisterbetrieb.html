@@ -184,8 +184,13 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         .brand-mark { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; background: var(--accent); color: #fff; border-radius: 6px; font-weight: 700; font-size: 17px; }
         .nav-links { display: flex; gap: 28px; font-size: 15px; color: var(--text-soft); }
         .nav-links a:hover { color: var(--text); }
-        .nav-cta { background: var(--accent); color: #fff; padding: 11px 22px; border-radius: 6px; font-size: 14px; font-weight: 600; transition: background 0.2s; }
+        .nav-cta { background: var(--accent); color: #fff; padding: 11px 22px; border-radius: 6px; font-size: 14px; font-weight: 600; transition: background 0.2s; white-space: nowrap; }
         .nav-cta:hover { background: var(--accent-dark); }
+        /* Mobile: Nav-Buchungs-CTA ausblenden — bei 390px passt "Festpreis anfragen" nicht sauber neben die lange Marke + Burger auf eine Zeile (umbricht/quetscht, unpremium). Buchung bleibt via Burger-Menü (#anfrage) + Hero-CTA erreichbar. Nav bleibt clean: Logo + Burger. */
+        @media (max-width: 600px) {
+            .nav-cta { display: none; }
+            .brand { white-space: nowrap; }
+        }
         .mobile-toggle { display: none; padding: 8px; }
         .mobile-toggle svg { width: 24px; height: 24px; }
         .mobile-menu { display: none; }

@@ -128,6 +128,16 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         .nav-cta { background: var(--accent); color: #fff; padding: 10px 22px; border-radius: 999px; font-size: 14px; font-weight: 500; transition: background 0.2s; }
         .nav-cta:hover { background: var(--accent-dark); }
         @media (max-width: 800px) { nav.primary { display: none; } header .nav-inner { height: 64px; } }
+        /* Mobile-Nav-CTA-Premium (2026-07): "Erstgespräch buchen" bei 390px sauber auf EINER
+           Zeile — nowrap-compact. Marke + CTA je white-space:nowrap, CTA kompakteres Padding
+           und 13px Schrift; nav-inner-Gap gekürzt, damit Marke+CTA sicher in ~342px passen und
+           die Seite bei 390px NICHT breiter als der Viewport wird. Nur mobil, Desktop unberührt. */
+        @media (max-width: 600px) {
+            header .nav-inner { gap: 10px; padding: 0 16px; }
+            .nav-brand { white-space: nowrap; min-width: 0; }
+            .brand-name { font-size: 15px; }
+            .nav-cta { white-space: nowrap; flex-shrink: 0; padding: 9px 14px; font-size: 13px; }
+        }
 
         .hero { padding: 80px 0 60px; background: var(--bg); }
         .hero-grid { display: grid; grid-template-columns: 1fr 0.95fr; gap: clamp(40px, 5vw, 72px); align-items: start; }

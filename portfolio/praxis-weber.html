@@ -201,6 +201,11 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         .nav-links a:hover { color: var(--text); }
         .nav-cta { background: var(--accent); color: #fff; padding: 11px 22px; border-radius: 999px; font-size: 14px; font-weight: 500; transition: background 0.2s; }
         .nav-cta:hover { background: var(--accent-dark); }
+        /* Mobile-Nav premium (2026-07): Nav-CTA aus (Burger + Hero-CTA vorhanden) → saubere Nav Logo+Marke+Burger, Marke einzeilig, kein H-Overflow, keine abgeschnittene Marke. */
+        @media (max-width: 600px) {
+            .nav-cta { display: none; }
+            .brand { white-space: nowrap; }
+        }
         .mobile-toggle { display: none; padding: 8px; }
         .mobile-toggle svg { width: 24px; height: 24px; }
         .mobile-menu { display: none; }

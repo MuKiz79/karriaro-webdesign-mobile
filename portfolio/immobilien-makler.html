@@ -203,6 +203,10 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         .nav-links a:hover { color: var(--text); }
         .nav-cta { background: var(--accent); color: #fff; padding: 11px 22px; border-radius: 4px; font-size: 14px; font-weight: 600; transition: background 0.2s; }
         .nav-cta:hover { background: var(--accent-dark); }
+        /* Mobile-Nav-Fix (2026-07): Nav-Buchungs-CTA "Wertermittlung starten" bricht bei 390px neben langer Marke + Burger auf 2-3 Zeilen um (gequetscht). Da Burger-Menue vorhanden + identischer Hero-CTA (.hero-ctas .btn-primary) sichtbar, Nav-CTA auf Handy ausblenden -> saubere Nav (Logo + Burger), premium, kein Overflow. Desktop unberuehrt. */
+        @media (max-width: 600px) {
+            .nav-cta { display: none; }
+        }
         .mobile-toggle { display: none; padding: 8px; }
         .mobile-toggle svg { width: 24px; height: 24px; }
         .mobile-menu { display: none; }

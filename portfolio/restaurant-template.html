@@ -199,8 +199,13 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         .nav-links { display: flex; gap: 32px; font-size: 13px; color: var(--text-soft); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
         .nav-links a { transition: color 0.2s; }
         .nav-links a:hover { color: var(--accent); }
-        .nav-cta { background: var(--accent); color: #fff; padding: 12px 24px; border-radius: var(--p-radius); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; transition: background 0.2s; }
+        .nav-cta { background: var(--accent); color: #fff; padding: 12px 24px; border-radius: var(--p-radius); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; transition: background 0.2s; }
         .nav-cta:hover { background: var(--accent-dark); }
+        /* Mobile-Nav premium: sauber Logo + Burger, Nav-CTA aus (Buchung liegt im Hero + Burger-Menue), Marke einzeilig, kein H-Overflow bei 390px */
+        @media (max-width: 600px) {
+            .nav-cta { display: none; }
+            .brand-name { white-space: nowrap; }
+        }
         .mobile-toggle { display: none; padding: 8px; color: var(--text); }
         .mobile-toggle svg { width: 26px; height: 26px; }
         .mobile-menu { display: none; }

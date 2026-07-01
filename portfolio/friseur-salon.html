@@ -137,6 +137,10 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         .mobile-toggle { display: none; padding: 8px; }
         .mobile-toggle svg { width: 24px; height: 24px; }
         .mobile-menu { display: none; }
+        /* Nav-Buchungs-CTA auf dem Handy ausblenden: Text "Termin online buchen" ist zu lang, um bei 390px neben Marke + Burger auf eine Zeile zu passen. Buchung bleibt ueber Hero-CTA + Burger-Menue erreichbar -> saubere Premium-Nav (Logo + Burger). */
+        @media (max-width: 600px) {
+            .nav-cta { display: none; }
+        }
 
         .hero { padding: clamp(64px, 8vh, 96px) 0 clamp(80px, 12vh, 140px); background: var(--bg); }
         .hero-grid { display: grid; grid-template-columns: 1fr 0.95fr; gap: clamp(40px, 5vw, 72px); align-items: start; }

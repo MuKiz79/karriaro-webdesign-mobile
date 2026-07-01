@@ -187,6 +187,13 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         .nav-links a:hover { color: var(--text); }
         .nav-cta { background: var(--accent); color: #fff; padding: 11px 22px; border-radius: 6px; font-size: 14px; font-weight: 600; transition: background 0.2s; }
         .nav-cta:hover { background: var(--accent-dark); }
+        /* Mobile-Nav premium: langer Nav-CTA neben langem Marken-Titel bricht bei 390px um.
+           CTA-Aktion ("Foto-Anfrage senden") bleibt im Hero-CTA + Burger-Menue erreichbar
+           -> Nav auf Handy sauber halten (Marke + Burger, keine gequetschte Pille). */
+        @media (max-width: 600px) {
+            .nav-cta { display: none; }
+            .brand { white-space: nowrap; }
+        }
         .mobile-toggle { display: none; padding: 8px; }
         .mobile-toggle svg { width: 24px; height: 24px; }
         .mobile-menu { display: none; }
