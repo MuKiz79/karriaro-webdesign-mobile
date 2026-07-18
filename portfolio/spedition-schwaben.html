@@ -478,27 +478,25 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
         .kr-strip a { color: inherit; text-decoration: none; }
         .kr-strip-brand { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; padding: 5px 13px 5px 7px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.22); transition: background 0.2s ease, border-color 0.2s ease; }
         .kr-strip-brand:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.45); }
-        .kr-strip-mark { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 4px; background: #C9A24B; color: #14202C; font-weight: 700; font-size: 13px; }
+        .kr-strip-mark { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 4px; background: #1A2E40; color: #fff; font-weight: 700; font-size: 13px; }
         .kr-strip-name { font-weight: 500; letter-spacing: 0.01em; }
         .kr-sn-sm { display: none; }
         .kr-strip-tag { color: rgba(255,255,255,0.72); font-size: 12px; text-align: center; flex: 1; min-width: 0; }
-        .kr-strip-cta { background: #C9A24B; color: #14202C !important; padding: 7px 16px; border-radius: 999px; font-weight: 600; flex-shrink: 0; transition: background 0.2s; }
-        .kr-strip-cta:hover { background: #B8912F; }
+        .kr-strip-cta { background: #1A2E40; color: #fff; padding: 6px 14px; border-radius: 4px; font-weight: 500; flex-shrink: 0; transition: background 0.2s; }
+        .kr-strip-cta:hover { background: #0058b8; }
         @media (max-width: 720px) { .kr-strip-tag { display: none; } .kr-strip { padding: 8px 16px; } .kr-sn-lg { display: none; } .kr-sn-sm { display: inline; } }
         .kr-footer-card { background: #0a0a0a; color: #fff; padding: clamp(64px, 10vh, 100px) 24px; font-family: 'Inter', -apple-system, system-ui, sans-serif; }
         .kr-footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: center; }
-        .kr-footer-eyebrow { color: #C9A24B; font-size: 11px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; margin: 0 0 18px; }
+        .kr-footer-eyebrow { color: #4ea3ff; font-size: 11px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; margin: 0 0 18px; }
         .kr-footer-headline { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: clamp(28px, 3.4vw, 44px); font-weight: 400; line-height: 1.15; letter-spacing: -0.015em; color: #fff; margin: 0 0 16px; }
-        .kr-footer-headline em { font-style: italic; color: #C9A24B; }
+        .kr-footer-headline em { font-style: italic; color: #4ea3ff; }
         .kr-footer-body { color: rgba(255,255,255,0.72); font-size: 16px; line-height: 1.55; font-weight: 300; margin: 0; }
         .kr-footer-ctas { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
-        .kr-footer-cta-primary { display: inline-flex; align-items: center; gap: 8px; background: #C9A24B; color: #14202C !important; padding: 16px 28px; border-radius: 4px; font-weight: 500; text-decoration: none; font-size: 15px; transition: background 0.2s; }
-        .kr-footer-cta-primary:hover { background: #B8912F; }
+        .kr-footer-cta-primary { display: inline-flex; align-items: center; gap: 8px; background: #1A2E40; color: #fff; padding: 16px 28px; border-radius: 4px; font-weight: 500; text-decoration: none; font-size: 15px; transition: background 0.2s; }
+        .kr-footer-cta-primary:hover { background: #0058b8; }
         .kr-footer-cta-secondary { color: rgba(255,255,255,0.72); font-size: 14px; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.3); padding: 8px 0; }
         .kr-footer-cta-secondary:hover { color: #fff; text-decoration-color: #fff; }
         @media (max-width: 720px) { .kr-footer-inner { grid-template-columns: 1fr; gap: 32px; } .kr-footer-ctas { align-items: stretch; } .kr-footer-cta-primary { justify-content: center; } }
-        /* Mobile-Überlauf-Fix (2026-07): Raster + Formular-Zeilen einspaltig, Grid-Items schrumpfbar. */
-        @media (max-width: 600px) { .quote-grid, .quote-form-row, .field-row { grid-template-columns: 1fr !important; } .damage-grid > *, .damage-info, .damage-form, .quote-field, .quote-grid > * { min-width: 0; } .quote-form input, .quote-form select { max-width: 100%; box-sizing: border-box; } .damage-info img { max-width: 100%; } }
     </style>
     <script async src="https://lighthouse.karriaro.de/t.js" data-site="karriaro-webdesign"></script>
     <link rel="stylesheet" href="/css/karriaro-tools.css">
@@ -526,7 +524,7 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
           "@id": "https://karriaro-webdesign.de/#organization",
           "name": "Karriaro Webdesign",
           "url": "https://karriaro-webdesign.de",
-          "logo": "https://karriaro-webdesign.de/images/favicon.svg",
+          "logo": "https://karriaro-webdesign.de/images/karriaro-logo-512.png",
           "email": "kontakt@karriaro.de",
           "address": { "@type": "PostalAddress", "streetAddress": "Spitalstr. 7", "addressLocality": "Schiltach", "postalCode": "77761", "addressCountry": "DE" },
           "founder": { "@type": "Person", "name": "Muammer Kızılaslan", "url": "https://karriaro-webdesign.de/gruender", "sameAs": ["https://muammerkizilaslan.com", "https://www.linkedin.com/in/muammerkizilaslan"] },
@@ -543,7 +541,7 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
       ]
     }
     </script>
-    <link rel="stylesheet" href="/css/mobile-overrides.css?v=449">
+    <link rel="stylesheet" href="/css/mobile-overrides.css?v=442">
     <script>(function(){if(/[?&]screenshot=1/.test(location.search))document.documentElement.classList.add('screenshot-mode');})();</script>
     <style>html.screenshot-mode .topbar,html.screenshot-mode header,html.screenshot-mode nav,html.screenshot-mode .kr-strip,html.screenshot-mode .kr-footer-card{display:none!important}</style>
     <link rel="manifest" href="/manifest.json">
@@ -1700,6 +1698,6 @@ section h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter'
     <script src="/js/karriaro-tools.js"></script>
     <script src="/js/concierge.js" data-branche="spedition" data-name="Spedition Schwaben" data-accent="#0E1F33" data-greeting="Willkommen bei Spedition Schwaben! Fragen Sie mich zu Frachtkosten, Laufzeiten oder Compliance-Dokumenten." defer></script>
 
-<script src="/js/m-interactions.js?v=430" defer></script>
+<script src="/js/m-interactions.js?v=425" defer></script>
 </body>
 </html>

@@ -107,11 +107,6 @@
 @media (max-width: 1023px) {
     body {
         margin: 0;
-        /* Backstop gegen horizontales „ins Leere wischen": dekorative Elemente
-           (z. B. die skalierte Hero-Goldblüte) dürfen NIE die Seite breiter als
-           den Viewport machen. `clip` statt `hidden` — bricht kein position:sticky
-           (auf Mobile in Nutzung) und keinen verschachtelten Scroll (Demo-Swiper). */
-        overflow-x: clip;
         background: var(--apple-snow);
         color: var(--apple-graphite);
         font-family: var(--apple-font-text);
@@ -409,9 +404,6 @@
         min-height: auto;
         background: var(--apple-snow);
         display: block;
-        /* Gezielt: die Hero-Goldblüte (.hero-keim-bloom, width:124% + scale(1.5),
-           bleibt via fill:both am Ende stehen) auf Viewport-Breite clippen. */
-        overflow-x: clip;
     }
 
     .hero-with-photo .wrap,
@@ -814,32 +806,14 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    /* Handy-Vorschau: mobile Browser-Adressleiste (Schloss + Domain mittig,
-       keine macOS-Ampel-Punkte) — signalisiert „Telefon-Browser". */
-    .m-poster-chrome--phone {
-        justify-content: center;
-        gap: 6px;
-        padding: 8px 14px;
-    }
-    .m-poster-chrome--phone .m-poster-chrome-url {
-        flex: 0 1 auto;
-    }
-    .m-poster-chrome-lock {
-        width: 11px;
-        height: 11px;
-        flex: none;
-        color: var(--apple-platinum);
-        opacity: 0.7;
-    }
 
     /* Sprint 162 — Aspect-Ratio 4:3 für "monumentale" Card-Höhe
        (Multi-Designer-Konsens: Magazin-Style impact). iframe-Scaling
        passt sich automatisch an (m-interactions.js setIframeScale
        Formel: stage.clientWidth / 1280, neue Card 94vw → Scale ~0.288). */
-    /* Handy-Vorschau: Hochkant-Stage (Telefon-Proportion) statt 4:3-Landscape. */
     .m-poster-stage {
         position: relative;
-        aspect-ratio: 4 / 5;
+        aspect-ratio: 4 / 3;
         overflow: hidden;
         background: var(--apple-fog);
     }
@@ -847,15 +821,15 @@
         position: absolute;
         top: 0;
         left: 0;
-        width: 402px;
-        height: 860px;
+        width: 1280px;
+        height: 1024px;
         border: 0;
         transform-origin: top left;
         /* --m-iframe-scale wird via JS gesetzt (m-interactions.js
-           setIframeScale, stage.clientWidth / 402). Fallback 0.9, damit bei
-           JS-Aussetzer das mobile Hero-Topleft sichtbar bleibt
-           (overflow:hidden clippt Überstand). */
-        transform: scale(var(--m-iframe-scale, 0.9));
+           setIframeScale, stage.clientWidth / 1280). Fallback 1 statt
+           0.3, damit bei JS-Aussetzer wenigstens Hero-Topleft sichtbar
+           bleibt (overflow:hidden clippt Überstand). */
+        transform: scale(var(--m-iframe-scale, 1));
         pointer-events: none;
     }
 
@@ -1380,17 +1354,14 @@
         opacity: 1;
     }
 
-    /* VOLLBILD-Viewer: das Beispiel öffnet komplett (top:0 + bottom:0 füllt den
-       fixed inset:0-Container), kein Sheet-Peek, keine runden Ecken — wirkt wie
-       eine eigene Seite. Raus per „← Zurück". */
     .m-demo-sheet-panel {
         position: absolute;
-        top: 0;
         bottom: 0;
         left: 0;
         right: 0;
         background: var(--apple-snow);
-        border-radius: 0;
+        border-radius: 16px 16px 0 0;
+        max-height: 92svh;
         display: flex;
         flex-direction: column;
         transform: translateY(100%);
@@ -1413,67 +1384,31 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
-        padding: 10px var(--apple-section-pad-x);
-        /* Notch/Statusbar-Abstand im Vollbild */
-        padding-top: calc(10px + env(safe-area-inset-top, 0px));
+        padding: 16px var(--apple-section-pad-x);
         border-bottom: 1px solid var(--apple-hairline);
     }
-    /* „← Zurück"-Button — primärer Ausstieg aus dem Vollbild-Beispiel */
-    .m-demo-sheet-back {
-        flex: 0 0 auto;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        min-height: 40px;
-        padding: 8px 14px 8px 10px;
-        border: 1px solid var(--apple-hairline);
-        border-radius: 999px;
-        background: var(--apple-snow);
-        color: var(--apple-ink);
-        font-family: var(--apple-font-text);
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-        transition: background 0.18s ease;
-    }
-    .m-demo-sheet-back:active { background: var(--apple-fog); }
-    .m-demo-sheet-back svg { width: 19px; height: 19px; flex: none; }
     .m-demo-sheet-head-text {
-        flex: 1 1 auto;
-        min-width: 0;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 1px;
+        gap: 2px;
     }
     .m-demo-sheet-eyebrow {
-        max-width: 100%;
         font-family: var(--apple-font-text);
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 600;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         color: var(--apple-graphite);
         margin: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     .m-demo-sheet-title {
-        max-width: 100%;
         font-family: var(--apple-font-display);
-        font-size: 17px;
+        font-size: 19px;
         font-weight: 600;
         letter-spacing: -0.018em;
-        line-height: 1.2;
+        line-height: 1.25;
         color: var(--apple-ink);
         margin: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     .m-demo-sheet-close {
         background: var(--apple-fog);
@@ -1493,8 +1428,7 @@
     }
 
     .m-demo-sheet-body {
-        flex: 1 1 auto;
-        min-height: 0;
+        flex: 1;
         position: relative;
         overflow: hidden;
     }
@@ -1529,221 +1463,21 @@
     }
 
     .m-demo-sheet-frame {
-        display: block;
         width: 100%;
         height: 100%;
         border: 0;
     }
 
-    /* Header-Actions: Icon-Button "In neuem Tab öffnen" + Schließen nebeneinander */
-    .m-demo-sheet-head-actions {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex: none;
-    }
-    .m-demo-sheet-open-tab {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: var(--apple-fog);
-        color: var(--apple-ink);
-        text-decoration: none;
-        -webkit-tap-highlight-color: transparent;
-    }
-    .m-demo-sheet-open-tab svg {
-        width: 17px;
-        height: 17px;
-    }
-
-    /* Footer = Anfrage-Brücke (primär) + Galerie-Navigation (Zurück · Zähler · Weiter) */
-    /* Footer = nur noch die Pagination, mittig (Anfrage-CTA wanderte nach oben) */
     .m-demo-sheet-foot {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 18px;
-        padding: 10px var(--apple-section-pad-x) calc(10px + env(safe-area-inset-bottom, 0px));
+        padding: 12px var(--apple-section-pad-x) 16px;
         border-top: 1px solid var(--apple-hairline);
         background: var(--apple-snow);
     }
-    /* Primärer Conversion-CTA — kompakte Pille oben rechts neben „← Zurück" */
-    .m-demo-sheet-anfrage {
-        flex: 0 1 auto;
-        min-width: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        min-height: 40px;
-        padding: 9px 16px;
-        border: none;
-        border-radius: 999px;
-        background: var(--apple-ink, #14202B);
-        color: #fff;
+    .m-demo-sheet-open-tab {
         font-family: var(--apple-font-text);
         font-size: 15px;
-        font-weight: 600;
-        letter-spacing: -0.005em;
-        white-space: nowrap;
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-        transition: transform 0.18s ease, opacity 0.18s ease;
-    }
-    .m-demo-sheet-anfrage span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .m-demo-sheet-anfrage:active {
-        transform: scale(0.97);
-        opacity: 0.92;
-    }
-    .m-demo-sheet-anfrage svg {
-        width: 17px;
-        height: 17px;
-        flex: none;
-    }
-    /* Sehr schmale Phones (iPhone SE 1): „Zurück"-Text weg → nur ← Pfeil,
-       damit der Anfrage-CTA garantiert passt. */
-    @media (max-width: 359px) {
-        .m-demo-sheet-back span { display: none; }
-        .m-demo-sheet-back { padding: 8px 12px; }
-    }
-    .m-demo-sheet-nav-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-    }
-    /* Icon-only Pagination (‹ ›) — kein „Zurück"-Wort mehr (kollidierte mit dem
-       Vollbild-Zurück oben). Ruhig + kompakt. */
-    .m-demo-sheet-nav {
-        flex: 0 0 auto;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 42px;
-        height: 42px;
-        padding: 0;
-        border: 1px solid var(--apple-hairline);
-        border-radius: 50%;
-        background: var(--apple-snow);
-        color: var(--apple-ink);
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-        transition: background 0.18s ease, border-color 0.18s ease;
-    }
-    .m-demo-sheet-nav:active {
-        background: var(--apple-fog);
-    }
-    .m-demo-sheet-nav svg {
-        width: 18px;
-        height: 18px;
-        flex: none;
-    }
-    .m-demo-sheet-counter {
-        flex: 1 1 auto;
-        text-align: center;
-        font-family: var(--apple-font-text);
-        font-size: 13px;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        color: var(--apple-graphite);
-        white-space: nowrap;
-    }
-
-    /* Visuell versteckt, aber für Screenreader/aria-labelledby da (Sheet-Titel) */
-    .m-sr-only {
-        position: absolute !important;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-    }
-
-    /* Werkzeug-Held: kurze Hinweis-Pill UNTEN über der Demo (kollidiert nicht mehr
-       mit der Demo-Kopfzeile), blendet nach 5 s automatisch aus. */
-    .m-demo-sheet-toolhint {
-        position: absolute;
-        bottom: 14px;
-        left: 50%;
-        z-index: 3;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        max-width: calc(100% - 28px);
-        padding: 9px 15px;
-        border: none;
-        border-radius: 999px;
-        background: rgba(20, 32, 43, 0.92);
-        -webkit-backdrop-filter: blur(8px);
-        backdrop-filter: blur(8px);
-        color: #fff;
-        font-family: var(--apple-font-text);
-        font-size: 13.5px;
         font-weight: 500;
-        line-height: 1.2;
-        box-shadow: 0 10px 28px rgba(16, 32, 44, 0.28);
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-        /* Start: leicht nach unten versetzt + transparent; .is-visible animiert ein */
-        transform: translate(-50%, 8px);
-        opacity: 0;
-        transition: opacity 0.28s var(--apple-ease-reveal), transform 0.28s var(--apple-ease-reveal);
-    }
-    .m-demo-sheet-toolhint.is-visible {
-        transform: translate(-50%, 0);
-        opacity: 1;
-    }
-    .m-demo-sheet-toolhint[hidden] { display: none; }
-    .m-demo-sheet-toolhint .m-toolhint-cog { width: 17px; height: 17px; flex: none; color: var(--apple-gold, #C9A24B); }
-    .m-demo-sheet-toolhint .m-toolhint-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .m-demo-sheet-toolhint .m-toolhint-text strong { font-weight: 700; }
-    .m-demo-sheet-toolhint .m-toolhint-arrow { width: 15px; height: 15px; flex: none; opacity: 0.85; }
-    @media (prefers-reduced-motion: reduce) {
-        .m-demo-sheet-toolhint { transition: none; }
-    }
-
-    /* Werkzeug-Badge auf der Demo-Karte (USP sichtbar machen) */
-    .m-demo-tool-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        align-self: flex-start;
-        margin: 2px 0 2px;
-        padding: 5px 11px 5px 9px;
-        border: 1px solid rgba(201, 162, 75, 0.45);
-        border-radius: 999px;
-        background: rgba(201, 162, 75, 0.12);
-        color: var(--apple-ink, #14202B);
-        font-family: var(--apple-font-text);
-        font-size: 12.5px;
-        font-weight: 500;
-        line-height: 1.25;
-    }
-    .m-demo-tool-badge svg {
-        width: 15px;
-        height: 15px;
-        flex: none;
-        color: #9c7d2e;
-    }
-    .m-demo-tool-badge strong { font-weight: 700; }
-
-    /* Schwebende Buttons (WhatsApp + Concierge "Fragen Sie uns") ausblenden,
-       solange das Burger-Menü ODER das Demo-Sheet offen ist — sonst liegen sie
-       (z-index ~2.1 Mrd.) ÜBER Menü/Sheet und verdecken Inhalte/Menüpunkte. */
-    body.m-menu-open .whatsapp-fab,
-    body.m-menu-open .krc-fab,
-    body.m-demo-sheet-open .whatsapp-fab,
-    body.m-demo-sheet-open .krc-fab {
-        display: none !important;
+        color: var(--kr-link-warm);
     }
 }
 

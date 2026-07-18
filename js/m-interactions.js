@@ -239,24 +239,16 @@
         var sheetTitle = document.querySelector('[data-m-demo-sheet-title]');
         var sheetEyebrow = document.querySelector('[data-m-demo-sheet-eyebrow]');
         var sheetTab = document.querySelector('[data-m-demo-sheet-tab]');
-        var sheetPrev = document.querySelector('[data-m-demo-sheet-prev]');
-        var sheetNext = document.querySelector('[data-m-demo-sheet-next]');
-        var sheetCounter = document.querySelector('[data-m-demo-sheet-counter]');
-        var sheetTool = document.querySelector('[data-m-demo-sheet-tool]');
-        var sheetToolName = document.querySelector('[data-m-demo-sheet-tool-name]');
-        var sheetAnfrage = document.querySelector('[data-m-demo-sheet-anfrage]');
-        var sheetAnfrageLabel = document.querySelector('[data-m-demo-sheet-anfrage-label]');
-        var currentTool = '';
-        var currentBranche = '';
         if (!rail || !dotsBox || !sheet) return;
         var slides = rail.querySelectorAll('.m-demo-swiper-slide');
         if (!slides.length) return;
 
-        // Handy-Vorschau: iframe rendert die Demo im PHONE-Viewport (402px),
-        // also das echte mobile Layout (eine Spalte) statt eines geschrumpften
-        // Desktop-Screenshots. Per transform:scale auf die Card-Stage-Breite.
-        var IFRAME_NATIVE_W = 402;
-        var IFRAME_NATIVE_H = 860;
+        // Sprint 148.6 — Transform-Scale iframe-Live-Preview im Desktop-
+        // Viewport (1280×800). Card ist 16:10 MacBook-Browser-Mockup,
+        // iframe rendert Portfolio-Page in Desktop-Layout (zweispaltiges
+        // Hero), wird via transform:scale auf Card-Stage-Breite verkleinert.
+        var IFRAME_NATIVE_W = 1280;
+        var IFRAME_NATIVE_H = 1024;
 
         function setIframeScale(stage) {
             var w = stage.clientWidth;
@@ -342,52 +334,39 @@
             }
             if (loadErrorEl) loadErrorEl.style.display = 'flex';
         }
-        function openSheetInternal(href, title, domain, tool, branche) {
+        function openSheetInternal(href, title, domain) {
             lastFocus = document.activeElement;
             if (sheetTitle) sheetTitle.textContent = title;
             if (sheetEyebrow) sheetEyebrow.textContent = domain;
             if (sheetTab) sheetTab.setAttribute('href', href);
-            if (sheetCounter && currentIndex >= 0) sheetCounter.textContent = (currentIndex + 1) + ' / ' + demos.length;
-            // Werkzeug-Held: Hinweis-Pill (erst nach iframe-Load zeigen) + Anfrage-Brücke-Label
-            currentTool = tool || '';
-            currentBranche = branche || '';
-            if (sheetToolName) sheetToolName.textContent = currentTool;
-            hideToolHint();
-            // Kurzes, immer passendes Label oben neben „← Zurück". Die Branche
-            // steckt weiterhin in der vorbefüllten Nachricht (goAnfrage), nicht im Button.
-            if (sheetAnfrageLabel) sheetAnfrageLabel.textContent = 'Website anfragen';
             if (sheetLoader) sheetLoader.classList.remove('is-hidden');
             clearLoadTimer();
             if (sheetFrame) {
-                // Mobile-Beispiel-Galerie — die VOLLE, interaktive Beispielseite laden,
-                // nicht nur den Hero-Embed ("nur Vorschau"). href ist bereits die volle,
-                // extensionslose Portfolio-URL (z. B. /portfolio/coaching-lehmann).
-                sheetFrame.setAttribute('src', href);
+                // Sprint 160 — Lean-Embed-HTML (build-embed-hero.mjs) statt ?embed=hero.
+                var leanSrc = href.replace(/\.html(\?.*)?$/, '-embed.html');
+                sheetFrame.setAttribute('src', leanSrc);
                 sheetFrame.style.opacity = '0';
                 loadTimer = setTimeout(showLoadError, 8000);
             }
             sheet.classList.add('is-open');
             sheet.setAttribute('aria-hidden', 'false');
-            document.body.classList.add('m-demo-sheet-open');
             document.body.style.overflow = 'hidden';
         }
-        function openSheet(href, title, domain, tool, branche) {
+        function openSheet(href, title, domain) {
             // Sprint 164 — View Transitions API für smoothes Sheet-Open
             // (Chrome 111+, Safari 18+). Graceful Fallback bei alten Browsern.
             if (document.startViewTransition) {
                 document.startViewTransition(function() {
-                    openSheetInternal(href, title, domain, tool, branche);
+                    openSheetInternal(href, title, domain);
                 });
             } else {
-                openSheetInternal(href, title, domain, tool, branche);
+                openSheetInternal(href, title, domain);
             }
         }
         function closeSheet() {
             clearLoadTimer();
-            hideToolHint();
             sheet.classList.remove('is-open');
             sheet.setAttribute('aria-hidden', 'true');
-            document.body.classList.remove('m-demo-sheet-open');
             document.body.style.overflow = '';
             if (sheetFrame) {
                 sheetFrame.setAttribute('src', 'about:blank');
@@ -395,58 +374,6 @@
             }
             if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
         }
-        // ── Werkzeug-Held: kurze Hinweis-Pill, die zum eingebauten Werkzeug springt ──
-        var toolHintTimer = null;
-        function showToolHint() {
-            if (!sheetTool || !currentTool) return;
-            sheetTool.hidden = false;
-            // reflow → CSS-Transition greift
-            void sheetTool.offsetWidth;
-            sheetTool.classList.add('is-visible');
-            // Ruhiger: nach 5 s automatisch wieder ausblenden (kurzer Nudge statt Dauer-Pille).
-            if (toolHintTimer) clearTimeout(toolHintTimer);
-            toolHintTimer = setTimeout(hideToolHint, 5000);
-            // Sobald der Nutzer selbst in der Demo scrollt → sofort ausblenden (er stöbert).
-            try {
-                var win = sheetFrame && sheetFrame.contentWindow;
-                if (win) {
-                    var onScroll = function () { hideToolHint(); win.removeEventListener('scroll', onScroll); };
-                    win.addEventListener('scroll', onScroll, { passive: true });
-                }
-            } catch (e) {}
-        }
-        function hideToolHint() {
-            if (toolHintTimer) { clearTimeout(toolHintTimer); toolHintTimer = null; }
-            if (!sheetTool) return;
-            sheetTool.classList.remove('is-visible');
-            sheetTool.hidden = true;
-        }
-        // Die Karriaro-Demo-Strip (.kr-strip: „← Zurück zu Karriaro · ab 1.990 €")
-        // ist im Viewer redundant zu unserem Zurück-Button + Anfrage-CTA → ausblenden
-        // (same-origin Style-Injektion). Standalone (neuer Tab) bleibt sie sichtbar.
-        function calmInnerDemo() {
-            try {
-                var doc = sheetFrame && sheetFrame.contentDocument;
-                if (doc && doc.head && !doc.getElementById('kr-viewer-calm')) {
-                    var st = doc.createElement('style');
-                    st.id = 'kr-viewer-calm';
-                    st.textContent = '.kr-strip{display:none!important}';
-                    doc.head.appendChild(st);
-                }
-            } catch (e) {}
-        }
-        function jumpToTool() {
-            try {
-                var doc = sheetFrame && sheetFrame.contentDocument;
-                if (doc) {
-                    // Gemeinsame Werkzeug-Selektoren über alle Demo-Seiten (same-origin).
-                    var el = doc.querySelector('.kr-tool-embed, [data-kr-tool-form], .kr-tool-form, #foerder, [id*="rechner"], [id*="werkzeug"]');
-                    if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            } catch (e) {}
-            hideToolHint();
-        }
-        if (sheetTool) sheetTool.addEventListener('click', jumpToTool);
         if (sheetFrame) {
             sheetFrame.addEventListener('load', function () {
                 if (sheetFrame.getAttribute('src') === 'about:blank') return;
@@ -454,73 +381,19 @@
                 if (sheetLoader) sheetLoader.classList.add('is-hidden');
                 sheetFrame.style.transition = 'opacity 240ms ease';
                 sheetFrame.style.opacity = '1';
-                calmInnerDemo();
-                showToolHint();
             });
         }
-        // ── Anfrage-Brücke: vom Beispiel direkt ins vorbefüllte Kontaktformular ──
-        function goAnfrage() {
-            var branche = currentBranche;
-            var title = (currentIndex >= 0 && demos[currentIndex]) ? demos[currentIndex].title : '';
-            var tool = currentTool;
-            closeSheet();
-            try { if (typeof window.krTrack === 'function') window.krTrack('Demo Branche anfragen', { branche: branche, quelle: title }); } catch (e) {}
-            setTimeout(function () {
-                var section = document.getElementById('kontakt');
-                if (section && section.scrollIntoView) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                var form = document.getElementById('kontakt-form');
-                if (!form) return;
-                var msg = form.querySelector('textarea[name="message"]');
-                if (msg && !msg.value.trim()) {
-                    msg.value = 'Ich interessiere mich für eine Website wie Ihr Beispiel „' + title + '"' +
-                        (branche ? (' (' + branche + ')') : '') +
-                        (tool ? (' — besonders das Werkzeug „' + tool + '".') : '.');
-                }
-                var nameInput = form.querySelector('input[name="name"]');
-                if (nameInput) setTimeout(function () { try { nameInput.focus({ preventScroll: true }); } catch (e) { nameInput.focus(); } }, 450);
-            }, 60);
-        }
-        if (sheetAnfrage) sheetAnfrage.addEventListener('click', goAnfrage);
-        // Geordnete Demo-Liste für Vor/Zurück-Navigation im Sheet (Mobile-Beispiel-Galerie).
-        // Reihenfolge = DOM-Reihenfolge der Cards; Persona-Tiles lösen card.click() aus
-        // → laufen durch denselben Index-Handler, currentIndex bleibt korrekt.
-        var openers = Array.prototype.slice.call(document.querySelectorAll('[data-m-demo-open]'));
-        var demos = openers.map(function (el) {
-            return {
-                href: el.getAttribute('data-m-demo-href'),
-                title: el.getAttribute('data-m-demo-title'),
-                domain: el.getAttribute('data-m-demo-domain'),
-                tool: el.getAttribute('data-m-demo-tool'),
-                branche: el.getAttribute('data-m-demo-branche')
-            };
-        });
-        var currentIndex = -1;
-        function openByIndex(i) {
-            if (!demos.length) return;
-            currentIndex = (i % demos.length + demos.length) % demos.length; // Wrap-around (durchblättern)
-            var d = demos[currentIndex];
-            // Beim Durchblättern (Sheet schon offen) den iframe direkt tauschen — KEIN
-            // erneuter View-Transition, der würde den laufenden abbrechen
-            // (InvalidStateError) und ist beim Weiter/Zurück auch unnötig.
-            if (sheet.classList.contains('is-open')) openSheetInternal(d.href, d.title, d.domain, d.tool, d.branche);
-            else openSheet(d.href, d.title, d.domain, d.tool, d.branche);
-        }
-        openers.forEach(function (el, i) {
+        document.querySelectorAll('[data-m-demo-open]').forEach(function (el) {
             el.addEventListener('click', function (e) {
                 e.preventDefault();
-                openByIndex(i);
+                openSheet(el.getAttribute('data-m-demo-href'), el.getAttribute('data-m-demo-title'), el.getAttribute('data-m-demo-domain'));
             });
         });
-        if (sheetPrev) sheetPrev.addEventListener('click', function () { openByIndex(currentIndex - 1); });
-        if (sheetNext) sheetNext.addEventListener('click', function () { openByIndex(currentIndex + 1); });
         document.querySelectorAll('[data-m-demo-sheet-close]').forEach(function (el) {
             el.addEventListener('click', closeSheet);
         });
         document.addEventListener('keydown', function (e) {
-            if (!sheet.classList.contains('is-open')) return;
-            if (e.key === 'Escape') closeSheet();
-            else if (e.key === 'ArrowRight') openByIndex(currentIndex + 1);
-            else if (e.key === 'ArrowLeft') openByIndex(currentIndex - 1);
+            if (e.key === 'Escape' && sheet.classList.contains('is-open')) closeSheet();
         });
     }
 
